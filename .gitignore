@@ -1,0 +1,18 @@
+.classpath
+.project
+*.cmd
+*.class
+/classes
+**/target/**
+**/logs/**
+.git/
+.settings/
+pom.properties
+MANIFEST.MF
+application-*.properties
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+logs/
