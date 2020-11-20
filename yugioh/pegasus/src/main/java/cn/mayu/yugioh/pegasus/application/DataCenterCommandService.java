@@ -2,13 +2,12 @@ package cn.mayu.yugioh.pegasus.application;
 
 import cn.mayu.yugioh.pegasus.application.command.CardInfoCreateCommand;
 import cn.mayu.yugioh.pegasus.application.command.MetaDataCreateCommand;
-import cn.mayu.yugioh.pegasus.application.datacenter.DataCenter;
-import cn.mayu.yugioh.pegasus.application.datacenter.DataCenterStrategy;
-import cn.mayu.yugioh.pegasus.application.exception.CardListCreateException;
+import cn.mayu.yugioh.pegasus.port.adapter.datacenter.DataCenter;
+import cn.mayu.yugioh.pegasus.port.adapter.datacenter.DataCenterStrategy;
+import cn.mayu.yugioh.pegasus.exception.CardListCreateException;
 import cn.mayu.yugioh.pegasus.domain.aggregate.cardlist.CardInfo;
 import cn.mayu.yugioh.pegasus.domain.aggregate.cardlist.CardInfoRepository;
 import cn.mayu.yugioh.pegasus.domain.aggregate.metadata.MetaData;
-import cn.mayu.yugioh.pegasus.domain.aggregate.metadata.MetaDataIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -33,14 +32,10 @@ public class DataCenterCommandService {
     public void createMetaData(MetaDataCreateCommand metaDataCreateCommand) {
         // 通过数据中心获取数据
         DataCenter dataCenter = dataCenterStrategy.findDataCenter(metaDataCreateCommand.getDataCenter());
-        String metaDataStr = dataCenter.obtainMetaData(metaDataCreateCommand.getResources());
+        List<MetaData> metaData = dataCenter.obtainMetaData(metaDataCreateCommand.getResources(), metaDataCreateCommand.getDataType());
 
-        // 创建元数据
-        MetaDataIdentity metaDataIdentity = new MetaDataIdentity(metaDataCreateCommand.getDataCenter(),
-                                                                 metaDataCreateCommand.getDataType());
-        MetaData metaData = new MetaData(metaDataIdentity, metaDataStr);
         // 发布领域命令
-        metaData.commitTo();
+        metaData.stream().forEach(MetaData::commitTo);
     }
 
     /**
@@ -49,12 +44,12 @@ public class DataCenterCommandService {
      */
     public void createCardList(CardInfoCreateCommand cardListCreateCommand) {
         DataCenter dataCenter = dataCenterStrategy.findDataCenter(cardListCreateCommand.getDataCenter());
-        Optional<List<String>> cardListOptional = dataCenter.obtainCardList();
+        Optional<List<CardInfo>> cardListOptional = dataCenter.obtainCardList();
         if (!cardListOptional.isPresent()) {
             throw new CardListCreateException(cardListCreateCommand.getDataCenter() + " card list not found");
         }
 
-        cardListOptional.get().stream().map(CardInfo::new).forEach(cardInfo -> {
+        cardListOptional.get().stream().forEach(cardInfo -> {
             // TODO 事件溯源，观察者模式
             cardInfoRepository.store(cardInfo);
             cardInfo.commitTo();

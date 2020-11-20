@@ -1,7 +1,7 @@
-package cn.mayu.yugioh.pegasus.application.datacenter;
+package cn.mayu.yugioh.pegasus.port.adapter.datacenter;
 
-import cn.mayu.yugioh.pegasus.application.exception.DataCenterFindException;
-import cn.mayu.yugioh.pegasus.infrastructure.datacenter.OurocgDataCenter;
+import cn.mayu.yugioh.pegasus.exception.DataCenterFindException;
+import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.ourocg.OurocgDataCenter;
 import com.google.common.collect.Maps;
 import org.springframework.stereotype.Component;
 import java.util.Map;
@@ -20,7 +20,11 @@ public class DataCenterStrategy {
         initDataCenter();
     }
 
+    /**
+     * 配置中心获取进行数据中心的初始化
+     */
     private void initDataCenter() {
+        // TODO 模拟
         DATA_CENTER_MAP.put(DataCenterEnum.OUROCG, new OurocgDataCenter("", "", Boolean.TRUE));
     }
 

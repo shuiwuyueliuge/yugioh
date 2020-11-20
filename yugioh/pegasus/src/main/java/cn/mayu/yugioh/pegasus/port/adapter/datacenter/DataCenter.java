@@ -1,4 +1,7 @@
-package cn.mayu.yugioh.pegasus.application.datacenter;
+package cn.mayu.yugioh.pegasus.port.adapter.datacenter;
+
+import cn.mayu.yugioh.pegasus.domain.aggregate.cardlist.CardInfo;
+import cn.mayu.yugioh.pegasus.domain.aggregate.metadata.MetaData;
 
 import java.util.Collection;
 import java.util.List;
@@ -45,7 +48,7 @@ public interface DataCenter {
      * @param resources 资源路径
      * @return 元数据信息
      */
-    String obtainMetaData(Collection<String> resources);
+    List<MetaData> obtainMetaData(Collection<String> resources, String dataType);
 
     /**
      * 获取卡片目录信息
@@ -53,7 +56,7 @@ public interface DataCenter {
      * @param resources 资源路径
      * @return 默认 Optional.empty()
      */
-    default Optional<List<String>> obtainCardList() {
+    default Optional<List<CardInfo>> obtainCardList() {
         return Optional.empty();
     }
 }
