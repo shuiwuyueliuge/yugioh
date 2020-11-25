@@ -1,7 +1,7 @@
 package cn.mayu.yugioh.pegasus.infrastructure.repository;
 
-import cn.mayu.yugioh.pegasus.domain.aggregate.cardlist.CardInfo;
-import cn.mayu.yugioh.pegasus.domain.aggregate.cardlist.CardInfoRepository;
+import cn.mayu.yugioh.pegasus.domain.aggregate.cardinfo.CardInfo;
+import cn.mayu.yugioh.pegasus.domain.aggregate.cardinfo.CardInfoRepository;
 import org.springframework.stereotype.Component;
 import java.util.List;
 

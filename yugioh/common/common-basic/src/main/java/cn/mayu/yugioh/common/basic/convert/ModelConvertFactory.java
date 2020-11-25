@@ -1,4 +1,4 @@
-package cn.mayu.yugioh.common.basic.exception.convert;
+package cn.mayu.yugioh.common.basic.convert;
 
 import com.google.common.collect.Lists;
 import java.util.List;

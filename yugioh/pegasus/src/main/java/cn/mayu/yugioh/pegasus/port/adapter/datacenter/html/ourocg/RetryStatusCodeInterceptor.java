@@ -34,7 +34,7 @@ public class RetryStatusCodeInterceptor extends HttpStatusCodeInterceptor {
 		}
 
 		try {
-			SECONDS.sleep(time <= 0 ? 1L : time);
+			SECONDS.sleep(time + 5);
 		} catch (InterruptedException e) {
 		}
 	}

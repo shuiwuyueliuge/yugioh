@@ -1,4 +1,4 @@
-package cn.mayu.yugioh.pegasus.domain.aggregate.cardlist;
+package cn.mayu.yugioh.pegasus.domain.aggregate.cardinfo;
 
 import java.util.List;
 

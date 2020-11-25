@@ -1,8 +1,8 @@
 package cn.mayu.yugioh.pegasus.infrastructure.convert;
 
-import cn.mayu.yugioh.common.basic.exception.convert.ModelConvertFactory;
+import cn.mayu.yugioh.common.basic.convert.ModelConvertFactory;
 import cn.mayu.yugioh.pegasus.application.dto.CardInfoDTO;
-import cn.mayu.yugioh.pegasus.domain.aggregate.cardlist.CardInfo;
+import cn.mayu.yugioh.pegasus.domain.aggregate.cardinfo.CardInfo;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,6 +1,6 @@
 package cn.mayu.yugioh.pegasus.port.adapter.datacenter;
 
-import cn.mayu.yugioh.pegasus.domain.aggregate.cardlist.CardInfo;
+import cn.mayu.yugioh.pegasus.domain.aggregate.cardinfo.CardInfo;
 import cn.mayu.yugioh.pegasus.domain.aggregate.metadata.MetaData;
 
 import java.util.Collection;

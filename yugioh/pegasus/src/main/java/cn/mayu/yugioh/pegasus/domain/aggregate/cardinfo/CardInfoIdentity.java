@@ -1,7 +1,9 @@
-package cn.mayu.yugioh.pegasus.domain.aggregate.cardlist;
+package cn.mayu.yugioh.pegasus.domain.aggregate.cardinfo;
 
 import cn.mayu.yugioh.common.basic.domain.ValueObject;
+import lombok.ToString;
 
+@ToString
 public class CardInfoIdentity extends ValueObject {
 
     private String identity;

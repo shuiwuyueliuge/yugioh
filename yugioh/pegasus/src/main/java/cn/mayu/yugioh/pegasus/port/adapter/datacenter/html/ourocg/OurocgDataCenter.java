@@ -1,12 +1,11 @@
 package cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.ourocg;
 
-import cn.mayu.yugioh.pegasus.domain.aggregate.cardlist.CardInfo;
+import cn.mayu.yugioh.pegasus.domain.aggregate.cardinfo.CardInfo;
 import cn.mayu.yugioh.pegasus.domain.aggregate.metadata.MetaData;
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.DataCenter;
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.DataCenterEnum;
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.HtmlHandler;
 import com.google.common.collect.Lists;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -63,9 +62,11 @@ public class OurocgDataCenter implements DataCenter {
         int page = 1;
         while(true) {
             List<CardInfo> infos = cardInfoHtmlHandler.handle("https://www.ourocg.cn/card/list-5/" + page);
-            result.addAll(infos);
-            if (infos.size() < 10) {
-                break;
+            if (infos != null) {
+                result.addAll(infos);
+                if (infos.size() < 10) {
+                    break;
+                }
             }
 
             page = page + 1;
@@ -74,7 +75,20 @@ public class OurocgDataCenter implements DataCenter {
         return Optional.of(result);
     }
 
-    public static void main(String[] args) {
-        new OurocgDataCenter("", "", false).obtainCardList();
-    }
+    // 分布式定时任务
+//    public static void main(String[] args) {
+//        System.out.println(ipToNumber("192.68.0.1"));
+//        System.out.println(ipToNumber("192.189.2.1"));
+//        System.out.println(ipToNumber("10.189.2.1"));
+//        System.out.println(ipToNumber("10.10.2.1"));
+//    }
+//
+//    public static Long ipToNumber(String ip) {
+//        Long ipLong = 0L;
+//        String[] ipNumbers = ip.split("\\.");
+//        for (String ipNumber : ipNumbers) {
+//            ipLong = ipLong << 8 | Integer.parseInt(ipNumber);
+//        }
+//        return ipLong;
+//    }
 }
