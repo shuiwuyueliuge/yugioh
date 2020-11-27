@@ -2,9 +2,9 @@ package cn.mayu.yugioh.pegasus.exception;
 
 import cn.mayu.yugioh.common.basic.exception.AbstractException;
 
-public class CardListCreateException extends AbstractException {
+public class CardDataCreateException extends AbstractException {
 
-    public CardListCreateException(String message) {
+    public CardDataCreateException(String message) {
         super(message);
     }
 }

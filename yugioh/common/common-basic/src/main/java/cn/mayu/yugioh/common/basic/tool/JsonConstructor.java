@@ -1,4 +1,4 @@
-package cn.mayu.yugioh.common.basic.json;
+package cn.mayu.yugioh.common.basic.tool;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -11,6 +11,10 @@ public class JsonConstructor {
 
     private JsonConstructor(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
+    }
+
+    public static JsonConstructor defaultInstance() {
+        return new JsonConstructor(new ObjectMapper());
     }
 
     public String writeValueAsString(Object value) {

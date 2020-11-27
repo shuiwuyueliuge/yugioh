@@ -1,4 +1,4 @@
-package cn.mayu.yugioh.common.basic.json;
+package cn.mayu.yugioh.common.basic.tool;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;

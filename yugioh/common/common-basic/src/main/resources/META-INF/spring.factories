@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+cn.mayu.yugioh.common.basic.domain.DomainLocalEventPublisher,\
+cn.mayu.yugioh.common.basic.event.sourcing.EventSourcingAutoConfiguration,\
+cn.mayu.yugioh.common.basic.event.sourcing.EventSourcingAutoConfiguration

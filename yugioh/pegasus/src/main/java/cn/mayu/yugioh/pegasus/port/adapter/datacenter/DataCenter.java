@@ -1,9 +1,7 @@
 package cn.mayu.yugioh.pegasus.port.adapter.datacenter;
 
-import cn.mayu.yugioh.pegasus.domain.aggregate.cardinfo.CardInfo;
-import cn.mayu.yugioh.pegasus.domain.aggregate.metadata.MetaData;
+import cn.mayu.yugioh.pegasus.application.CardDTO;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,20 +41,12 @@ public interface DataCenter {
     DataCenterEnum type();
 
     /**
-     * 获取元数据
-     *
-     * @param resources 资源路径
-     * @return 元数据信息
+     * 获取卡片信息
      */
-    List<MetaData> obtainMetaData(Collection<String> resources, String dataType);
+    List<CardDTO> obtainCards();
 
     /**
-     * 获取卡片目录信息
-     *
-     * @param resources 资源路径
-     * @return 默认 Optional.empty()
+     * 是否有数据
      */
-    default Optional<List<CardInfo>> obtainCardList() {
-        return Optional.empty();
-    }
+    boolean hasNext();
 }
