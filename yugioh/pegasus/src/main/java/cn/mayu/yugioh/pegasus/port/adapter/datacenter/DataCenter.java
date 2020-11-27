@@ -1,8 +1,6 @@
 package cn.mayu.yugioh.pegasus.port.adapter.datacenter;
 
-import cn.mayu.yugioh.pegasus.application.CardDTO;
-
-import java.util.List;
+import java.util.Iterator;
 import java.util.Optional;
 
 /**
@@ -43,10 +41,5 @@ public interface DataCenter {
     /**
      * 获取卡片信息
      */
-    List<CardDTO> obtainCards();
-
-    /**
-     * 是否有数据
-     */
-    boolean hasNext();
+    Iterator obtainCards();
 }
