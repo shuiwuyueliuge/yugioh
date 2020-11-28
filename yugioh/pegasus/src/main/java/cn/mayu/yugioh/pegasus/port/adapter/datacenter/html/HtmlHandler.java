@@ -6,5 +6,5 @@ package cn.mayu.yugioh.pegasus.port.adapter.datacenter.html;
  */
 public interface HtmlHandler<T> {
 
-	T handle(String url);
+	T handle(String url) throws HtmlHandlerException;
 }

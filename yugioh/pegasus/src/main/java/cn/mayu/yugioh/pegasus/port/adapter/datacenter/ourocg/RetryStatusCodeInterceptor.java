@@ -1,4 +1,4 @@
-package cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.ourocg;
+package cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg;
 
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.HtmlParser;
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.HttpStatusCodeInterceptor;

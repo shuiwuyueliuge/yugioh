@@ -1,5 +1,6 @@
 package cn.mayu.yugioh.pegasus.application;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 
@@ -8,9 +9,6 @@ public class CardDTO {
 
     // 卡片密码
     private String password;
-
-    // 当前卡包的编号
-    private List<String> serial;
 
     // 中文名
     private String name;
@@ -69,8 +67,8 @@ public class CardDTO {
     // 连接方向
     private List<String> linkArrow;
 
-    // 罕贵度
-    private List<String> rare;
+//    // 罕贵度
+//    private List<String> rare;
 
     // wiki
     private String adjust;
@@ -78,5 +76,27 @@ public class CardDTO {
     // 卡类型(monster,magic,trap)
     private String typeVal;
 
+    // 卡片原始url
     private String cardUrl;
+
+    // wikiUrl
+    private String adjustUrl;
+
+    // 卡包/发售日/编号/罕贵/卡包缩写
+    private List<IncludeInfo> includes;
+
+    @Data
+    @AllArgsConstructor
+    public static class IncludeInfo {
+
+        private String packageName;
+
+        private String SaleDate;
+
+        private String serial;
+
+        private String rare;
+
+        private String packShortName;
+    }
 }

@@ -10,8 +10,9 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public abstract class DefaultHtmlHandler<T> implements HtmlHandler<T> {
-	
-	public T handle(String url) {
+
+	@Override
+	public T handle(String url) throws HtmlHandlerException {
 		HtmlParser parser = new HtmlParser(url);
 		VisitResponse response = parser.getResponse();
 		if (log.isDebugEnabled()) {

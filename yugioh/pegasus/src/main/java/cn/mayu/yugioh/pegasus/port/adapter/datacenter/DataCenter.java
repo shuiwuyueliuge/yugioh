@@ -1,6 +1,10 @@
 package cn.mayu.yugioh.pegasus.port.adapter.datacenter;
 
+import cn.mayu.yugioh.pegasus.application.CardDTO;
+import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.HtmlHandlerException;
+
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -41,5 +45,15 @@ public interface DataCenter {
     /**
      * 获取卡片信息
      */
-    Iterator obtainCards();
+    Iterator<List<CardDTO>> obtainCards();
+
+    /**
+     * 获取卡片收录详情
+     */
+    List<CardDTO.IncludeInfo> obtainIncluded(String resources);
+
+    /**
+     * 获取卡片wiki
+     */
+    String adjust(String resources);
 }
