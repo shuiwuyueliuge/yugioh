@@ -1,5 +1,7 @@
 package cn.mayu.yugioh.pegasus.application;
 
+import cn.mayu.yugioh.common.basic.domain.DomainEvent;
+import cn.mayu.yugioh.common.basic.domain.DomainLocalEventPublisher;
 import cn.mayu.yugioh.pegasus.application.command.CardInfoCreateCommand;
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.DataCenter;
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.DataCenterStrategy;
@@ -16,6 +18,9 @@ public class DataCenterCommandService {
 
     @Autowired
     private DataCenterStrategy dataCenterStrategy;
+
+    @Autowired
+    private DomainLocalEventPublisher domainLocalEventPublisher;
 
     /**
      * 创建card目录
@@ -34,9 +39,14 @@ public class DataCenterCommandService {
                 data.setIncludes(includeInfos);
             });
 
-            System.out.println(cards);
             // 异步通知进度
             // 保存异步发送事件
+            domainLocalEventPublisher.publishEvent(
+                    new DomainEvent(
+                            "createCardList",
+                            cards,
+                            this)
+            );
         }
     }
 }

@@ -1,5 +1,6 @@
 package cn.mayu.yugioh.common.basic.domain;
 
+import cn.mayu.yugioh.common.basic.tool.SnowFlake;
 import lombok.Getter;
 import java.time.LocalDateTime;
 import java.util.EventObject;
@@ -10,7 +11,7 @@ public class DomainEvent<T> extends EventObject {
     /**
      * 事件id
      */
-    private String eventId;
+    private long eventId;
 
     /**
      * 事件发生时间
@@ -27,9 +28,9 @@ public class DomainEvent<T> extends EventObject {
      */
     private T body;
 
-    public DomainEvent(String eventId, String type, T body, Object source) {
+    public DomainEvent(String type, T body, Object source) {
         super(source);
-        this.eventId = eventId;
+        this.eventId = SnowFlake.nextId();
         this.occurredOn = LocalDateTime.now();
         this.type = type;
         this.body = body;
