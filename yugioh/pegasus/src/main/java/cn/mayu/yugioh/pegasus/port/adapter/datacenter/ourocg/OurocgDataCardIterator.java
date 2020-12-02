@@ -1,11 +1,13 @@
 package cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg;
 
-import cn.mayu.yugioh.pegasus.application.CardDTO;
+import cn.mayu.yugioh.pegasus.domain.aggregate.Card;
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.HtmlHandler;
 import lombok.SneakyThrows;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class OurocgDataCardIterator implements Iterator {
 
@@ -15,13 +17,17 @@ public class OurocgDataCardIterator implements Iterator {
 
     private HtmlHandler<List<Map<String, String>>> cardInfoHtmlHandler;
 
+    private HtmlHandler<IncludeDetail> includeHtmlHandler;
+
     private String cardUrl;
 
-    public OurocgDataCardIterator(HtmlHandler<List<Map<String, String>>> cardInfoHtmlHandler) {
+    public OurocgDataCardIterator(HtmlHandler<List<Map<String, String>>> cardInfoHtmlHandler,
+                                  HtmlHandler<IncludeDetail> includeHtmlHandler) {
         this.start = 1;
         this.next = true;
         this.cardUrl = "https://www.ourocg.cn/card/list-5/";
         this.cardInfoHtmlHandler = cardInfoHtmlHandler;
+        this.includeHtmlHandler = includeHtmlHandler;
     }
 
     @Override
@@ -35,15 +41,23 @@ public class OurocgDataCardIterator implements Iterator {
      */
     @SneakyThrows
     @Override
-    public List<CardDTO> next() {
-        System.out.println(start);
+    public List<Card> next() {
         List<Map<String, String>> infos = cardInfoHtmlHandler.handle(this.cardUrl + start);
-        List<CardDTO> dtoList = OurocgAdapter.getCardDTOList(infos);
-        if (dtoList.size() < 10) {
+        CardDetail cardDetail = OurocgCardAdapter.getCardDTOList(infos);
+        Map<String, IncludeDetail> includeDetails = cardDetail.getDetailUrl().stream()
+                .map(resources -> includeHtmlHandler.handle(resources)).collect(Collectors
+                        .toMap(data -> data.getCardName(), Function.identity(), (a, b) -> a));
+        cardDetail.getCards().forEach(data -> {
+            IncludeDetail includeDetail = includeDetails.get(data.getName().getName());
+            data.setAdjust(includeDetail.getAdjust());
+            data.setIncludes(OurocgCardAdapter.getIncludeInfo(includeDetail));
+        });
+
+        if (cardDetail.getCards().size() < 10) {
             this.next = false;
         }
 
         this.start = start + 1;
-        return dtoList;
+        return cardDetail.getCards();
     }
 }

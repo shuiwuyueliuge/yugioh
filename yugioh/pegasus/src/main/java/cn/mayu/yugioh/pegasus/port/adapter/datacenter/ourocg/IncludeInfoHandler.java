@@ -3,34 +3,33 @@ package cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg;
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.DefaultHtmlHandler;
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.HtmlParser;
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.HttpStatusCodeInterceptorChain;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import java.util.ArrayList;
-import static cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg.Include.IncludeInfo;
 import java.util.List;
 
 @Slf4j
 @Component
-public class IncludeInfoHandler extends DefaultHtmlHandler<Include> {
+public class IncludeInfoHandler extends DefaultHtmlHandler<IncludeDetail> {
 
     @Override
-    protected Include htmlTranslate(HtmlParser parser) {
+    protected IncludeDetail htmlTranslate(HtmlParser parser) {
         String[] s = parser.parseByTag("template");
         String html = parser.toString();
         String[] res = parser.parseByTag("td");
-        List<IncludeInfo> infos = new ArrayList<IncludeInfo>();
+        List<IncludeDetail.IncludeInfo> infos = Lists.newArrayList();
         collectToList(infos, res, parser);
         String adjust = parseAdjust(parser.setHtml(html));
-        Include cd = new Include();
+        IncludeDetail cd = new IncludeDetail();
         cd.setAdjust(adjust);
         cd.setIncludeInfos(infos);
         cd.setCardName(s[0]);
         return cd;
     }
 
-    private void collectToList(List<IncludeInfo> infos, String[] res, HtmlParser parser) {
+    private void collectToList(List<IncludeDetail.IncludeInfo> infos, String[] res, HtmlParser parser) {
         for (int i = 3; i <= res.length; i += 3) {
-            IncludeInfo builder = new IncludeInfo();
+            IncludeDetail.IncludeInfo builder = new IncludeDetail.IncludeInfo();
             String number = res[i - 2];
             if (number.indexOf("-") != -1) {
                 builder.setShortName(number.substring(0, number.indexOf("-")));

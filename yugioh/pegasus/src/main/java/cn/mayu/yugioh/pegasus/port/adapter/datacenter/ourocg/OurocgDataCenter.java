@@ -1,11 +1,9 @@
 package cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg;
 
-import cn.mayu.yugioh.pegasus.application.CardDTO;
+import cn.mayu.yugioh.pegasus.domain.aggregate.Card;
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.AbstractDataCenter;
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.DataCenterEnum;
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.HtmlHandler;
-import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.HtmlHandlerException;
-import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import java.util.Iterator;
@@ -18,9 +16,7 @@ public class OurocgDataCenter extends AbstractDataCenter {
 
     private HtmlHandler<List<Map<String, String>>> cardInfoHtmlHandler;
 
-    private HtmlHandler<Include> includeHtmlHandler;
-
-    private String adjust;
+    private HtmlHandler<IncludeDetail> includeHtmlHandler;
 
     public OurocgDataCenter() {
         this.cardInfoHtmlHandler = new CardInfoHtmlHandler();
@@ -33,26 +29,7 @@ public class OurocgDataCenter extends AbstractDataCenter {
     }
 
     @Override
-    public Iterator<List<CardDTO>> obtainCards() {
-        return new OurocgDataCardIterator(cardInfoHtmlHandler);
-    }
-
-    @Override
-    public List<CardDTO.IncludeInfo> obtainIncluded(String resources) {
-        try {
-            Include include = includeHtmlHandler.handle(resources);
-            adjust = include.getAdjust();
-            return OurocgAdapter.getIncludeInfo(include);
-        } catch (HtmlHandlerException e) {
-            log.error("url:[{}] status code:[{}]", e.getUrl(), e.getStatusCode());
-            return Lists.newArrayList();
-        }
-    }
-
-    @Override
-    public String adjust(String resources) {
-        String result = adjust;
-        adjust = "";
-        return result;
+    public Iterator<List<Card>> obtainCards() {
+        return new OurocgDataCardIterator(cardInfoHtmlHandler, includeHtmlHandler);
     }
 }

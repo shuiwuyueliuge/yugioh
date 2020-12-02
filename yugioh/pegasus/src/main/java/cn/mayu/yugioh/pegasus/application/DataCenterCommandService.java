@@ -1,8 +1,7 @@
 package cn.mayu.yugioh.pegasus.application;
 
-import cn.mayu.yugioh.common.basic.domain.DomainEvent;
-import cn.mayu.yugioh.common.basic.domain.DomainLocalEventPublisher;
 import cn.mayu.yugioh.pegasus.application.command.CardInfoCreateCommand;
+import cn.mayu.yugioh.pegasus.domain.aggregate.Card;
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.DataCenter;
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.DataCenterStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,6 @@ public class DataCenterCommandService {
     @Autowired
     private DataCenterStrategy dataCenterStrategy;
 
-    @Autowired
-    private DomainLocalEventPublisher domainLocalEventPublisher;
-
     /**
      * 创建card目录
      *
@@ -29,24 +25,10 @@ public class DataCenterCommandService {
      */
     public void createCardList(CardInfoCreateCommand cardListCreateCommand) {
         DataCenter dataCenter = dataCenterStrategy.findDataCenter(cardListCreateCommand.getDataCenter());
-        Iterator<List<CardDTO>> cardIterator = dataCenter.obtainCards();
+        Iterator<List<Card>> cardIterator = dataCenter.obtainCards();
         while (cardIterator.hasNext()) {
-            List<CardDTO> cards = cardIterator.next();
-            cards.stream().forEach(data -> {
-                List<CardDTO.IncludeInfo> includeInfos = dataCenter.obtainIncluded(data.getCardUrl());
-                String adjust = dataCenter.adjust(data.getAdjustUrl());
-                data.setAdjust(adjust);
-                data.setIncludes(includeInfos);
-            });
-
-            // 异步通知进度
-            // 保存异步发送事件
-            domainLocalEventPublisher.publishEvent(
-                    new DomainEvent(
-                            "createCardList",
-                            cards,
-                            this)
-            );
+            List<Card> cards = cardIterator.next();
+            cards.forEach(Card::commitTo);
         }
     }
 }
