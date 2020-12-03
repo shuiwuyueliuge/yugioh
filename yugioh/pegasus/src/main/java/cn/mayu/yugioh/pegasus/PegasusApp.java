@@ -20,6 +20,6 @@ public class PegasusApp {
 
     @Bean
     public SchedulingConfigurer init() {
-        return taskRegistrar -> taskRegistrar.setScheduler(Executors.newFixedThreadPool(2));
+        return taskRegistrar -> taskRegistrar.setScheduler(Executors.newScheduledThreadPool(2));
     }
 }

@@ -50,6 +50,29 @@ public class JsonParser {
         }
     }
 
+    public List<Map<String, String>> parseJsonArray2Map(String json) {
+        try {
+            JsonNode jsonNode = objectMapper.readTree(json);
+            List<Map<String, String>> objectList = Lists.newArrayList();
+            Iterator<JsonNode> nodeIterator = jsonNode.elements();
+            while (nodeIterator.hasNext()) {
+                Map<String, String> objectMap = Maps.newHashMap();
+                JsonNode node = nodeIterator.next();
+                Iterator<String> nameIterator = node.fieldNames();
+                while (nameIterator.hasNext()) {
+                    String name = nameIterator.next();
+                    objectMap.put(name, node.findValue(name).asText());
+                }
+
+                objectList.add(objectMap);
+            }
+
+            return objectList;
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public JsonParser findArrayByKey(String content, String key) {
         try {
             this.json = objectMapper.readTree(content).findPath(key).toString();

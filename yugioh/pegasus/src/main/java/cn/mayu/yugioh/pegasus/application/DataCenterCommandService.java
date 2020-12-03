@@ -1,9 +1,9 @@
 package cn.mayu.yugioh.pegasus.application;
 
 import cn.mayu.yugioh.pegasus.application.command.CardInfoCreateCommand;
-import cn.mayu.yugioh.pegasus.domain.aggregate.Card;
-import cn.mayu.yugioh.pegasus.port.adapter.datacenter.DataCenter;
-import cn.mayu.yugioh.pegasus.port.adapter.datacenter.DataCenterStrategy;
+import cn.mayu.yugioh.pegasus.application.datacenter.DataCenterFactory;
+import cn.mayu.yugioh.pegasus.application.datacenter.DataCenterStrategy;
+import cn.mayu.yugioh.pegasus.domain.aggregate.MetaData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Iterator;
@@ -20,15 +20,14 @@ public class DataCenterCommandService {
 
     /**
      * 创建card目录
-     *
      * @param cardListCreateCommand
      */
     public void createCardList(CardInfoCreateCommand cardListCreateCommand) {
-        DataCenter dataCenter = dataCenterStrategy.findDataCenter(cardListCreateCommand.getDataCenter());
-        Iterator<List<Card>> cardIterator = dataCenter.obtainCards();
+        DataCenterFactory dataCenter = dataCenterStrategy.findDataCenter(cardListCreateCommand.getDataCenter());
+        Iterator<List<MetaData>> cardIterator = dataCenter.getCardData().obtainCards();
         while (cardIterator.hasNext()) {
-            List<Card> cards = cardIterator.next();
-            cards.forEach(Card::commitTo);
+            List<MetaData> metaData = cardIterator.next();
+            metaData.forEach(MetaData::commitTo);
         }
     }
 }

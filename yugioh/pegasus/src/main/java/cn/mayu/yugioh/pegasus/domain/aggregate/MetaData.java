@@ -5,41 +5,19 @@ import cn.mayu.yugioh.common.basic.domain.DomainEventPublisher;
 import cn.mayu.yugioh.common.basic.domain.Entity;
 import cn.mayu.yugioh.common.basic.tool.BeanManager;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
-import java.util.List;
 
-@Data
+@Getter
 @ToString
+@NoArgsConstructor
 @AllArgsConstructor
-public class Card extends Entity {
+public class MetaData extends Entity {
 
-    // 唯一标识
-    private CardIdentity cardIdentity;
+    private MetaDataIdentity metaDataIdentity;
 
-    // 名称
-    private Name name;
-
-    // 图片地址
-    private String imgUrl;
-
-    // 怪兽卡信息
-    private Monster monster;
-
-    // 描述
-    private Description description;
-
-    // 卡片类型
-    private List<String> typeSt;
-
-    // wiki
-    private String adjust;
-
-    // 卡类型(monster,magic,trap)
-    private String typeVal;
-
-    // 卡包/发售日/编号/罕贵/卡包缩写
-    private List<Include> includes;
+    private String data;
 
     /**
      * 发布领域事件
@@ -47,7 +25,7 @@ public class Card extends Entity {
     public void commitTo() {
         DomainEventPublisher eventPublisher = BeanManager.getBean(DomainEventPublisher.class);
         eventPublisher.publishEvent(new DomainEvent(
-                "createCardList",
+                metaDataIdentity.getType(),
                 this
         ));
     }

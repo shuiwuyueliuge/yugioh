@@ -1,4 +1,4 @@
-package cn.mayu.yugioh.pegasus.port.adapter.datacenter;
+package cn.mayu.yugioh.pegasus.application.datacenter;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

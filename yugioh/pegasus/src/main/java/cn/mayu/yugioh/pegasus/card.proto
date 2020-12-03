@@ -1,0 +1,77 @@
+package cn.mayu.yugioh.common.dto.cardsource;
+option java_outer_classname = "CardProto";
+
+message CardDetail {
+	
+	// 卡片密码
+	optional string password = 1;
+
+	// 当前卡包的编号
+	optional string serial = 2;
+
+	// 中文名
+	optional string name = 3;
+
+	// 日文名
+	optional string nameJa = 4;
+
+	// 英文名
+	optional string nameEn = 5;
+
+	// nw名称
+	optional string nameNw = 6;
+
+	// 图片地址
+	optional string imgUrl = 7;
+
+	// 等级
+	optional int32 level = 8;
+
+	// 属性
+	optional string attribute = 9;
+
+	// 种族
+	optional string race = 10;
+
+	// 攻击力
+	optional string atk = 11;
+
+	// 防御力
+	optional string def = 12;
+
+	// 左刻度
+	optional string pendL = 13;
+
+	// 右刻度
+	optional string pendR = 14;
+
+	// 链接数
+	optional string link = 15;
+
+	// 效果
+	optional string desc = 16;
+
+	// 限制
+	optional string ban = 17;
+
+	// nw效果
+	optional string descNw = 18;
+
+	// 日文效果
+	optional string descJa = 19;
+
+	// 英文效果
+	optional string descEn = 20;
+
+	// 卡片类型
+	repeated string typeSt = 21;
+
+	// 连接方向
+	repeated string linkArrow = 22;
+
+	// 罕贵度
+	repeated string rare = 23;
+
+	// wiki
+	optional string adjust = 24;
+}

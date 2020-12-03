@@ -1,5 +1,6 @@
 package cn.mayu.yugioh.pegasus.application.command;
 
+import cn.mayu.yugioh.pegasus.application.datacenter.DataCenterEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CardInfoCreateCommand {
 
-    private String dataCenter;
+    private DataCenterEnum dataCenter;
 }

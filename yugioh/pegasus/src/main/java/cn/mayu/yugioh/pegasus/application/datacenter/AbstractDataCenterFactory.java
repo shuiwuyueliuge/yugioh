@@ -1,8 +1,6 @@
-package cn.mayu.yugioh.pegasus.port.adapter.datacenter;
+package cn.mayu.yugioh.pegasus.application.datacenter;
 
-import java.util.Optional;
-
-public abstract class AbstractDataCenter implements DataCenter {
+public abstract class AbstractDataCenterFactory implements DataCenterFactory {
 
     private String domain;
 
@@ -27,7 +25,7 @@ public abstract class AbstractDataCenter implements DataCenter {
     }
 
     @Override
-    public Optional<String> domain() {
-        return Optional.of(this.domain);
+    public String domain() {
+        return this.domain;
     }
 }
