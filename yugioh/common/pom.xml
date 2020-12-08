@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>common-basic</module>
+        <module>common-facade</module>
     </modules>
 
     <dependencies>

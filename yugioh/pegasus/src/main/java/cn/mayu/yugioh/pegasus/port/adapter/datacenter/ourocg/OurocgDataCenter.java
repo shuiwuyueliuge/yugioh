@@ -1,7 +1,7 @@
 package cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg;
 
 import cn.mayu.yugioh.pegasus.application.datacenter.*;
-import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.HtmlHandler;
+import cn.mayu.yugioh.common.basic.html.HtmlHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import java.util.List;

@@ -25,6 +25,7 @@ public class MetaData extends Entity {
     public void commitTo() {
         DomainEventPublisher eventPublisher = BeanManager.getBean(DomainEventPublisher.class);
         eventPublisher.publishEvent(new DomainEvent(
+                metaDataIdentity.getKey(),
                 metaDataIdentity.getType(),
                 this
         ));

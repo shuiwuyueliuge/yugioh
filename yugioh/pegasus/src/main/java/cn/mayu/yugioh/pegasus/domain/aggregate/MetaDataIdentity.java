@@ -13,8 +13,11 @@ public class MetaDataIdentity extends ValueObject {
 
     private String type;
 
-    public MetaDataIdentity(DataCenterEnum centerEnum, String type) {
+    private String key;
+
+    public MetaDataIdentity(String key, DataCenterEnum centerEnum, String type) {
         this.centerEnum = centerEnum;
         this.type = type;
+        this.key = key;
     }
 }

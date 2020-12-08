@@ -19,10 +19,10 @@ public class EventDO {
     private Long id;
 
     @Column(name = "event_id")
-    private long eventId;
+    private String eventId;
 
     @Column(name = "occurred_on")
-    private LocalDateTime occurredOn;
+    private String occurredOn;
 
     @Column(name = "type")
     private String type;
@@ -30,10 +30,7 @@ public class EventDO {
     @Column(name = "body", length = 5000)
     private String body;
 
-    @Column(name = "status", insertable = false, columnDefinition="TINYINT(1) default '0'")
-    private Integer status;
-
-    public EventDO(long eventId, LocalDateTime occurredOn, String type, String body) {
+    public EventDO(String eventId, String occurredOn, String type, String body) {
         this.eventId = eventId;
         this.occurredOn = occurredOn;
         this.type = type;

@@ -1,9 +1,9 @@
 package cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg;
 
-import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.HtmlHandlerException;
-import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.HtmlParser;
-import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.HttpStatusCodeInterceptor;
-import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.VisitResponse;
+import cn.mayu.yugioh.common.basic.html.HtmlHandlerException;
+import cn.mayu.yugioh.common.basic.html.HtmlParser;
+import cn.mayu.yugioh.common.basic.html.HttpStatusCodeInterceptor;
+import cn.mayu.yugioh.common.basic.html.VisitResponse;
 
 public class ErrorStatusCodeInterceptor extends HttpStatusCodeInterceptor {
 

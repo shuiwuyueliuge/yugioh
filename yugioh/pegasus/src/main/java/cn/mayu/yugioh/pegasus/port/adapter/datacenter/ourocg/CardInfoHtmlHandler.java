@@ -1,9 +1,9 @@
 package cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg;
 
 import cn.mayu.yugioh.common.basic.tool.JsonParser;
-import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.DefaultHtmlHandler;
-import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.HtmlParser;
-import cn.mayu.yugioh.pegasus.port.adapter.datacenter.html.HttpStatusCodeInterceptorChain;
+import cn.mayu.yugioh.common.basic.html.DefaultHtmlHandler;
+import cn.mayu.yugioh.common.basic.html.HtmlParser;
+import cn.mayu.yugioh.common.basic.html.HttpStatusCodeInterceptorChain;
 import java.util.List;
 import java.util.Map;
 

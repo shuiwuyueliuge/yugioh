@@ -8,7 +8,5 @@ public interface DomainEventConsumer<T> {
      * 获取事件类型
      * @return 事件类型
      */
-    default String getEventType() {
-        return null;
-    }
+    String getEventType();
 }

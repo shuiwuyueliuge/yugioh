@@ -27,7 +27,9 @@ public class DataCenterCommandService {
         Iterator<List<MetaData>> cardIterator = dataCenter.getCardData().obtainCards();
         while (cardIterator.hasNext()) {
             List<MetaData> metaData = cardIterator.next();
-            metaData.forEach(MetaData::commitTo);
+            for(MetaData data : metaData) {
+                data.commitTo();
+            }
         }
     }
 }
