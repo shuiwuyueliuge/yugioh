@@ -1,7 +1,7 @@
 package cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg;
 
+import cn.mayu.yugioh.common.basic.tool.HashGenerator;
 import cn.mayu.yugioh.common.basic.tool.JsonConstructor;
-import cn.mayu.yugioh.common.basic.tool.SnowFlake;
 import cn.mayu.yugioh.pegasus.application.datacenter.DataCenterEnum;
 import cn.mayu.yugioh.pegasus.domain.aggregate.*;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +15,7 @@ public class OurocgCardAdapter {
         return mapList.stream().map(data -> {
             data.put("password", data.get("password").replace("null", ""));
             if (StringUtils.isEmpty(data.get("password"))) {
-                data.put("password", SnowFlake.nextId() + "");
+                data.put("password", HashGenerator.createHashStr(data.get("name")));
             }
 
             MetaDataIdentity metaDataIdentity = new MetaDataIdentity(data.get("password"), DataCenterEnum.OUROCG, "card");

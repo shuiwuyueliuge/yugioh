@@ -2,7 +2,6 @@ package cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg;
 
 import cn.mayu.yugioh.common.basic.tool.JsonConstructor;
 import cn.mayu.yugioh.common.basic.tool.JsonParser;
-import cn.mayu.yugioh.common.basic.tool.SnowFlake;
 import cn.mayu.yugioh.pegasus.application.datacenter.DataCenterEnum;
 import cn.mayu.yugioh.pegasus.application.dto.CardDTO;
 import cn.mayu.yugioh.pegasus.domain.aggregate.MetaData;
@@ -45,7 +44,7 @@ public class OurocgCardDataCenter implements CardData, Iterator<List<MetaData>> 
     public CardDTO data2CardDTO(String cardData) {
         CardDTO cardDTO = new CardDTO();
         Map<String, String> map = JsonParser.defaultInstance().readObjectValue(cardData, Map.class);
-        cardDTO.setPassword((map.get("password") == null || map.get("password").equals("null")) ? SnowFlake.nextId() + "" : map.get("password"));
+        cardDTO.setPassword(map.get("password"));
         cardDTO.setName(map.get("name"));
         cardDTO.setNameJa(map.get("name_ja"));
         cardDTO.setNameEn(map.get("name_en"));
@@ -105,11 +104,11 @@ public class OurocgCardDataCenter implements CardData, Iterator<List<MetaData>> 
         List<Map<String, String>> infos = cardInfoHtmlHandler.handle(this.cardUrl + start);
         List<MetaData> includes = infos.stream().map(data -> {
             Map<String, Object> map = includeHtmlHandler.handle(data.get("href"));
-            if (data.get("name").equals(map.get("cardName"))) {
+            if (data.get("password").equals(map.get("password"))) {
                 data.put("adjust", map.get("adjust") == null ? map.get("adjust").toString() : "");
             }
 
-            MetaDataIdentity metaDataIdentity = new MetaDataIdentity(map.get("cardName").toString(), DataCenterEnum.OUROCG, "include");
+            MetaDataIdentity metaDataIdentity = new MetaDataIdentity(map.get("password").toString(), DataCenterEnum.OUROCG, "include");
             return new MetaData(metaDataIdentity, JsonConstructor.defaultInstance().writeValueAsString(map.get("includeInfos")));
         }).filter(data -> !data.getData().equals("[]")).collect(Collectors.toList());
         List<MetaData> result = OurocgCardAdapter.getCardDTOList(infos);

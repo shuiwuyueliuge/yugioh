@@ -17,7 +17,7 @@ public class EventSourcingRepositoryImpl implements EventSourcingRepository {
     @Override
     public void store(EventSourcing eventSourcing) {
         mysqlEventSourcingRepository.save(new EventSourcingDO(
-                eventSourcing.getId(),
+                eventSourcing.getEventId(),
                 eventSourcing.getOccurredOn(),
                 eventSourcing.getType(),
                 eventSourcing.getBody()

@@ -27,7 +27,8 @@ public class MetaData extends Entity {
         eventPublisher.publishEvent(new DomainEvent(
                 metaDataIdentity.getKey(),
                 metaDataIdentity.getType(),
-                this
+                data,
+                metaDataIdentity.getCenterEnum()
         ));
     }
 }

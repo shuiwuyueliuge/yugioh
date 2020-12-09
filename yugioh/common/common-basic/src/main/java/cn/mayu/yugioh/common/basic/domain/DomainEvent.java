@@ -31,18 +31,18 @@ public class DomainEvent<T> extends EventObject implements Serializable {
      */
     private T body;
 
-    public DomainEvent(String eventId, String type, T body) {
-        super(body);
+    public DomainEvent(String eventId, String type, T body, Object source) {
+        super(source);
         this.eventId = eventId;
         this.occurredOn = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         this.type = type;
         this.body = body;
     }
 
-    public DomainEvent(String eventId, LocalDateTime occurredOn, String type, T body) {
-        super("");
+    public DomainEvent(String eventId, String occurredOn, String type, T body, Object source) {
+        super(source);
         this.eventId = eventId;
-        this.occurredOn = occurredOn.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.occurredOn = occurredOn;
         this.type = type;
         this.body = body;
     }

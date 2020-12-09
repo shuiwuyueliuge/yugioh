@@ -4,6 +4,9 @@ import cn.mayu.yugioh.common.basic.domain.DomainEvent;
 import cn.mayu.yugioh.common.basic.domain.DomainEventConsumer;
 import cn.mayu.yugioh.common.facade.postman.EventFacade;
 import cn.mayu.yugioh.common.facade.postman.commond.EventReceiveCommand;
+import cn.mayu.yugioh.pegasus.application.datacenter.DataCenterEnum;
+import cn.mayu.yugioh.pegasus.application.datacenter.DataCenterStrategy;
+import cn.mayu.yugioh.pegasus.application.dto.CardDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +16,21 @@ public class CardCreateEventConsumer implements DomainEventConsumer {
     @Autowired
     private EventFacade eventFacade;
 
+    @Autowired
+    private DataCenterStrategy dataCenterStrategy;
+
     @Override
     public void subscribe(DomainEvent domainEvent) {
-        eventFacade.receiveEvent(new EventReceiveCommand(domainEvent));
+        CardDTO cardDTO = dataCenterStrategy.findDataCenter((DataCenterEnum) domainEvent.getSource()).getCardData().data2CardDTO(domainEvent.getBody().toString());
+        DomainEvent<CardDTO> cardDTODomainEvent = new DomainEvent<>(
+                domainEvent.getEventId(),
+                domainEvent.getOccurredOn(),
+                domainEvent.getType(),
+                cardDTO,
+                domainEvent.getSource()
+        );
+
+        eventFacade.receiveEvent(new EventReceiveCommand(cardDTODomainEvent));
     }
 
     @Override
@@ -23,14 +38,5 @@ public class CardCreateEventConsumer implements DomainEventConsumer {
         return "card";
     }
 }
-
-//        RestTemplate restTemplate = new RestTemplate();
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-//        HttpEntity<String> request = new HttpEntity<>(JsonConstructor.defaultInstance().writeValueAsString(new EventReceiveCommand(domainEvent)), headers);
-//        String url = "http://127.0.0.1:10201/event/receive";
-//        ResponseEntity<String> postForEntity = restTemplate.postForEntity(url, request, String.class);
-//        String body = postForEntity.getBody();
-//        System.out.println(body);
 
 
