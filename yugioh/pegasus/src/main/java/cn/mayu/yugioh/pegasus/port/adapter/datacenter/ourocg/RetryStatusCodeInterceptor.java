@@ -28,10 +28,10 @@ public class RetryStatusCodeInterceptor extends HttpStatusCodeInterceptor {
 
 	private void sleep(int statusCode, String url, String retryAfter) {
 		long time = Long.parseLong(retryAfter);
-		if (log.isDebugEnabled()) {
-			log.debug("connect [{}] status code is [{}] and retry-after is [{}]",
+		//if (log.isDebugEnabled()) {
+			log.info("connect [{}] status code is [{}] and retry-after is [{}]",
 					url, statusCode, retryAfter);
-		}
+		//}
 
 		try {
 			SECONDS.sleep(time + 5);

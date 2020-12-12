@@ -32,7 +32,6 @@ public class EventSourcingTask {
 
     @Scheduled(cron = "${event.exec.corn}")
     public void getEvent() {
-        // 注册中心获取ip列表
         List<ServiceInstance> serviceInstances = discoveryClient.getInstances(serviceId);
         String local = getLocalIp();
         long localLong = ipToNumber(local);
@@ -43,7 +42,7 @@ public class EventSourcingTask {
             return;
         }
 
-        List<EventSourcing> eventSourcing = eventQueryService.findByStatus(0, 0, 100);
+        List<EventSourcing> eventSourcing = eventQueryService.findByStatusOrderByOccurredOn(0, 0, 100);
         eventSourcing.forEach(eventCommandService::publishEvent);
     }
 

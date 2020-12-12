@@ -14,7 +14,8 @@ public class DataCenterResources {
     private DataCenterCommandService dataCenterCommandService;
 
     @PostMapping("/card_data")
-    public void createCardInfo(@RequestBody CardInfoCreateCommand cardInfoCreateCommand) {
-        dataCenterCommandService.createCardList(cardInfoCreateCommand);
+    public String createCardInfo(@RequestBody CardInfoCreateCommand cardInfoCreateCommand) {
+        new Thread(() -> dataCenterCommandService.createCardList(cardInfoCreateCommand)).start();
+        return "1";
     }
 }

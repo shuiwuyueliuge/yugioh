@@ -28,7 +28,7 @@ public class OurocgCardDataCenter implements CardData, Iterator<List<MetaData>> 
 
     public OurocgCardDataCenter(HtmlHandler<List<Map<String, String>>> cardInfoHtmlHandler,
                                 HtmlHandler<Map<String, Object>> includeHtmlHandler) {
-        this.start = 1106;
+        this.start = 1;
         this.next = true;
         this.cardUrl = "https://www.ourocg.cn/card/list-5/";
         this.cardInfoHtmlHandler = cardInfoHtmlHandler;
@@ -44,6 +44,12 @@ public class OurocgCardDataCenter implements CardData, Iterator<List<MetaData>> 
     public CardDTO data2CardDTO(String cardData) {
         CardDTO cardDTO = new CardDTO();
         Map<String, String> map = JsonParser.defaultInstance().readObjectValue(cardData, Map.class);
+        map.forEach((key, value) -> {
+            if (value == null || "null".equals(value)) {
+                map.put(key, "");
+            }
+        });
+
         cardDTO.setPassword(map.get("password"));
         cardDTO.setName(map.get("name"));
         cardDTO.setNameJa(map.get("name_ja"));
@@ -61,16 +67,30 @@ public class OurocgCardDataCenter implements CardData, Iterator<List<MetaData>> 
         cardDTO.setDescEn(effectFormat(map.get("desc_en")));
         cardDTO.setDescNw(effectFormat(map.get("desc_nw")));
         cardDTO.setImgUrl(map.get("img_url"));
-        cardDTO.setTypeVal(map.get("type_val"));
+        if ("1".equals(map.get("type_val"))) {
+            cardDTO.setTypeVal("怪兽");
+        }
+
+        if ("2".equals(map.get("type_val"))) {
+            cardDTO.setTypeVal("魔法");
+        }
+
+        if ("3".equals(map.get("type_val"))) {
+            cardDTO.setTypeVal("陷阱");
+        }
+
         cardDTO.setAdjust(map.get("adjust"));
         String linkArrow = map.get("link_arrow");
-        if ("null".equals(linkArrow) && (linkArrow.indexOf(",") != -1 || linkArrow.indexOf("，") != -1)) {
+        if (linkArrow != null && (linkArrow.indexOf(",") != -1 || linkArrow.indexOf("，") != -1)) {
             linkArrow = linkArrow.replace("，", ",");
             cardDTO.setLinkArrow(Lists.newArrayList(linkArrow.split(",")));
         }
 
         String typeSt = map.get("type_st");
-        if ("null".equals(typeSt) && typeSt.indexOf("\\|") != -1) {
+        if (typeSt != null && typeSt.indexOf("|") != -1) {
+            typeSt = typeSt.replace("怪兽|", "")
+                    .replace("魔法|", "")
+                    .replace("陷阱|", "");
             cardDTO.setTypeSt(Lists.newArrayList(typeSt.split("\\|")));
         }
 
@@ -101,19 +121,24 @@ public class OurocgCardDataCenter implements CardData, Iterator<List<MetaData>> 
 
     @Override
     public List<MetaData> next() {
-        List<Map<String, String>> infos = cardInfoHtmlHandler.handle(this.cardUrl + start);
-        List<MetaData> includes = infos.stream().map(data -> {
-            Map<String, Object> map = includeHtmlHandler.handle(data.get("href"));
-            if (data.get("password").equals(map.get("password"))) {
-                data.put("adjust", map.get("adjust") == null ? map.get("adjust").toString() : "");
-            }
+        try {
+            List<Map<String, String>> infos = cardInfoHtmlHandler.handle(this.cardUrl + start);
+            List<MetaData> includes = infos.stream().map(data -> {
+                Map<String, Object> map = includeHtmlHandler.handle(data.get("href"));
+                if (data.get("password").equals(map.get("password"))) {
+                    data.put("adjust", map.get("adjust") == null ? map.get("adjust").toString() : "");
+                }
 
-            MetaDataIdentity metaDataIdentity = new MetaDataIdentity(map.get("password").toString(), DataCenterEnum.OUROCG, "include");
-            return new MetaData(metaDataIdentity, JsonConstructor.defaultInstance().writeValueAsString(map.get("includeInfos")));
-        }).filter(data -> !data.getData().equals("[]")).collect(Collectors.toList());
-        List<MetaData> result = OurocgCardAdapter.getCardDTOList(infos);
-        this.start = start + 1;
-        result.addAll(includes);
-        return result;
+                MetaDataIdentity metaDataIdentity = new MetaDataIdentity(map.get("password").toString(), DataCenterEnum.OUROCG, "include");
+                return new MetaData(metaDataIdentity, JsonConstructor.defaultInstance().writeValueAsString(map.get("includeInfos")));
+            }).filter(data -> !data.getData().equals("[]")).collect(Collectors.toList());
+            List<MetaData> result = OurocgCardAdapter.getCardDTOList(infos);
+            this.start = start + 1;
+            result.addAll(includes);
+            return result;
+        } catch (Exception e) {
+            this.start = start + 1;
+            return Lists.newArrayList();
+        }
     }
 }

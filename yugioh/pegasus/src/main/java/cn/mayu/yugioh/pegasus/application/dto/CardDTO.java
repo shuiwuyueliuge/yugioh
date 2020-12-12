@@ -1,5 +1,6 @@
 package cn.mayu.yugioh.pegasus.application.dto;
 
+import com.google.common.collect.Lists;
 import lombok.Data;
 import java.util.List;
 
@@ -48,9 +49,6 @@ public class CardDTO {
     // 效果
     private String desc;
 
-    // 限制
-    private String ban;
-
     // nw效果
     private String descNw;
 
@@ -61,10 +59,10 @@ public class CardDTO {
     private String descEn;
 
     // 卡片类型
-    private List<String> typeSt;
+    private List<String> typeSt = Lists.newArrayList();
 
     // 连接方向
-    private List<String> linkArrow;
+    private List<String> linkArrow = Lists.newArrayList();
 
     // wiki
     private String adjust;

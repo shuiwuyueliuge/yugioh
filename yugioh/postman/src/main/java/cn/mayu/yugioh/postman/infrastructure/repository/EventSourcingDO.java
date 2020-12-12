@@ -19,10 +19,10 @@ public class EventSourcingDO {
     private Long id;
 
     @Column(name = "event_id")
-    private String eventId;
+    private Long eventId;
 
     @Column(name = "occurred_on")
-    private String occurredOn;
+    private Long occurredOn;
 
     @Column(name = "type")
     private String type;
@@ -30,14 +30,18 @@ public class EventSourcingDO {
     @Column(name = "body", length = 5000)
     private String body;
 
-
-    @Column(name = "status", insertable = false, columnDefinition="TINYINT(1) default '0'")
+    @Column(name = "status")
     private Integer status;
 
-    public EventSourcingDO(String eventId, String occurredOn, String type, String body) {
+    @Column(name = "routing_key")
+    private String routingKey;
+
+    public EventSourcingDO(Long eventId, Long occurredOn, String type, String body, Integer status, String routingKey) {
         this.eventId = eventId;
         this.occurredOn = occurredOn;
         this.type = type;
         this.body = body;
+        this.status = status;
+        this.routingKey = routingKey;
     }
 }

@@ -12,18 +12,28 @@ import lombok.ToString;
 @AllArgsConstructor
 public class EventSourcing extends Entity {
 
-    private String eventId;
+    private long eventId;
 
-    private String occurredOn;
+    private long occurredOn;
 
     private String body;
 
     private String type;
+
+    private String routingKey;
+
+    private Integer status;
 
     public EventSourcing(DomainEvent domainEvent) {
         this.eventId = domainEvent.getEventId();
         this.occurredOn = domainEvent.getOccurredOn();
         this.body = JsonConstructor.defaultInstance().writeValueAsString(domainEvent.getBody());
         this.type = domainEvent.getType();
+        this.routingKey = domainEvent.getRoutingKey();
+        this.status = 0;
+    }
+
+    public void publishSuccess() {
+        this.status = 1;
     }
 }

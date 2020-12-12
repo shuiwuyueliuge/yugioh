@@ -12,26 +12,37 @@ import java.util.stream.Collectors;
 public class EventSourcingRepositoryImpl implements EventSourcingRepository {
 
     @Autowired
-    private MysqlEventSourcingRepository mysqlEventSourcingRepository;
+    private JpaEventSourcingRepository jpaEventSourcingRepository;
 
     @Override
     public void store(EventSourcing eventSourcing) {
-        mysqlEventSourcingRepository.save(new EventSourcingDO(
+        EventSourcingDO eventSourcingDO = new EventSourcingDO(
                 eventSourcing.getEventId(),
                 eventSourcing.getOccurredOn(),
                 eventSourcing.getType(),
-                eventSourcing.getBody()
-        ));
+                eventSourcing.getBody(),
+                eventSourcing.getStatus(),
+                eventSourcing.getRoutingKey()
+        );
+
+        EventSourcingDO saved = jpaEventSourcingRepository.findByEventId(eventSourcing.getEventId());
+        if (saved != null) {
+            eventSourcingDO.setId(saved.getId());
+        }
+
+        jpaEventSourcingRepository.save(eventSourcingDO);
     }
 
     @Override
-    public List<EventSourcing> findByStatus(int status, int from, int size) {
-        List<EventSourcingDO> eventList = mysqlEventSourcingRepository.findByStatus(status, PageRequest.of(from, size));
+    public List<EventSourcing> findByStatusOrderByOccurredOn(int status, int from, int size) {
+        List<EventSourcingDO> eventList = jpaEventSourcingRepository.findByStatusOrderByOccurredOn(status, PageRequest.of(from, size));
         return eventList.stream().map(data -> new EventSourcing(
                 data.getEventId(),
                 data.getOccurredOn(),
                 data.getBody(),
-                data.getType()
+                data.getType(),
+                data.getRoutingKey(),
+                data.getStatus()
         )).collect(Collectors.toList());
     }
 }

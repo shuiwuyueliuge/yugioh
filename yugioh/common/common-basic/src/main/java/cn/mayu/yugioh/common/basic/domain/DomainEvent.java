@@ -3,8 +3,6 @@ package cn.mayu.yugioh.common.basic.domain;
 import lombok.Getter;
 import lombok.ToString;
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.EventObject;
 
 @Getter
@@ -14,12 +12,12 @@ public class DomainEvent<T> extends EventObject implements Serializable {
     /**
      * 事件id
      */
-    private String eventId;
+    private long eventId;
 
     /**
      * 事件发生时间
      */
-    private String occurredOn;
+    private long occurredOn;
 
     /**
      * 事件类型
@@ -31,20 +29,19 @@ public class DomainEvent<T> extends EventObject implements Serializable {
      */
     private T body;
 
-    public DomainEvent(String eventId, String type, T body, Object source) {
-        super(source);
-        this.eventId = eventId;
-        this.occurredOn = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        this.type = type;
-        this.body = body;
-    }
+    /**
+     * 事件的路由键
+     */
+    private String routingKey;
 
-    public DomainEvent(String eventId, String occurredOn, String type, T body, Object source) {
+    public DomainEvent(long eventId, long occurredOn, String type,
+                       T body, Object source, String routingKey) {
         super(source);
         this.eventId = eventId;
         this.occurredOn = occurredOn;
         this.type = type;
         this.body = body;
+        this.routingKey = routingKey;
     }
 
     public DomainEvent() {

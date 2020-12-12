@@ -31,7 +31,8 @@ public class IncludeCreateEventConsumer implements DomainEventConsumer {
                     domainEvent.getOccurredOn(),
                     domainEvent.getType(),
                     includeDTO,
-                    domainEvent.getSource()
+                    domainEvent.getSource(),
+                    includeDTO.getPassword()
             );
 
             eventFacade.receiveEvent(new EventReceiveCommand(cardDTODomainEvent));

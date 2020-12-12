@@ -4,10 +4,13 @@ import cn.mayu.yugioh.common.basic.domain.DomainEvent;
 import cn.mayu.yugioh.common.basic.domain.DomainEventPublisher;
 import cn.mayu.yugioh.common.basic.domain.Entity;
 import cn.mayu.yugioh.common.basic.tool.BeanManager;
+import cn.mayu.yugioh.common.basic.tool.SnowFlake;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @ToString
@@ -25,10 +28,12 @@ public class MetaData extends Entity {
     public void commitTo() {
         DomainEventPublisher eventPublisher = BeanManager.getBean(DomainEventPublisher.class);
         eventPublisher.publishEvent(new DomainEvent(
-                metaDataIdentity.getKey(),
+                SnowFlake.nextId(),
+                System.currentTimeMillis(),
                 metaDataIdentity.getType(),
                 data,
-                metaDataIdentity.getCenterEnum()
+                metaDataIdentity.getCenterEnum(),
+                metaDataIdentity.getKey()
         ));
     }
 }

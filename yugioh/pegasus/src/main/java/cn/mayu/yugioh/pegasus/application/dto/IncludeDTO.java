@@ -18,4 +18,6 @@ public class IncludeDTO {
     private String rare;
 
     private String packShortName;
+
+    private String password;
 }

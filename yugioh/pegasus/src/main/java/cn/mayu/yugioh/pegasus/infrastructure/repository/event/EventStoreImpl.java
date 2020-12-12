@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MysqlEventStore implements EventStore {
+public class EventStoreImpl implements EventStore {
 
     @Autowired
-    private DomainEventRepository domainEventRepository;
+    private JpaEventRepository domainEventRepository;
 
     @Override
     public void store(DomainEvent domainEvent) {

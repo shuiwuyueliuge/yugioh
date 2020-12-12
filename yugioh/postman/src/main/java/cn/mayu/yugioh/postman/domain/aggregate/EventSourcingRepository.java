@@ -6,5 +6,5 @@ public interface EventSourcingRepository {
 
     void store(EventSourcing eventSourcing);
 
-    List<EventSourcing> findByStatus(int status, int from, int size);
+    List<EventSourcing> findByStatusOrderByOccurredOn(int status, int from, int size);
 }

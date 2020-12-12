@@ -27,9 +27,9 @@ public class CardCreateEventConsumer implements DomainEventConsumer {
                 domainEvent.getOccurredOn(),
                 domainEvent.getType(),
                 cardDTO,
-                domainEvent.getSource()
+                domainEvent.getSource(),
+                cardDTO.getPassword()
         );
-
         eventFacade.receiveEvent(new EventReceiveCommand(cardDTODomainEvent));
     }
 

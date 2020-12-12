@@ -17,7 +17,8 @@ public class OurocgIncludeDataCenter implements IncludeData {
                 data.get("sellTime"),
                 data.get("number"),
                 data.get("rare"),
-                data.get("shortName")
+                data.get("shortName"),
+                data.get("password")
                 )).collect(Collectors.toList());
     }
 }

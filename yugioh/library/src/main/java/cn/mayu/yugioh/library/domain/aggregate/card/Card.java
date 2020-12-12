@@ -1,6 +1,10 @@
 package cn.mayu.yugioh.library.domain.aggregate.card;
 
+import cn.mayu.yugioh.common.basic.domain.DomainEvent;
+import cn.mayu.yugioh.common.basic.domain.DomainEventPublisher;
 import cn.mayu.yugioh.common.basic.domain.Entity;
+import cn.mayu.yugioh.common.basic.tool.BeanManager;
+import cn.mayu.yugioh.common.basic.tool.SnowFlake;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -34,4 +38,16 @@ public class Card extends Entity {
 
     // 卡类型
     private String typeVal;
+
+    public void commitTo() {
+        DomainEventPublisher eventPublisher = BeanManager.getBean(DomainEventPublisher.class);
+        eventPublisher.publishEvent(new DomainEvent(
+                SnowFlake.nextId(),
+                System.currentTimeMillis(),
+                "card",
+                this,
+                this,
+                cardIdentity.getPassword()
+        ));
+    }
 }

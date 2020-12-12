@@ -19,10 +19,10 @@ public class EventDO {
     private Long id;
 
     @Column(name = "event_id")
-    private String eventId;
+    private Long eventId;
 
     @Column(name = "occurred_on")
-    private String occurredOn;
+    private Long occurredOn;
 
     @Column(name = "type")
     private String type;
@@ -30,7 +30,7 @@ public class EventDO {
     @Column(name = "body", length = 5000)
     private String body;
 
-    public EventDO(String eventId, String occurredOn, String type, String body) {
+    public EventDO(Long eventId, Long occurredOn, String type, String body) {
         this.eventId = eventId;
         this.occurredOn = occurredOn;
         this.type = type;

@@ -12,7 +12,7 @@ public class EventQueryService {
     @Autowired
     private EventSourcingRepository eventSourcingRepository;
 
-    public List<EventSourcing> findByStatus(int status, int from, int size) {
-        return eventSourcingRepository.findByStatus(status, from, size);
+    public List<EventSourcing> findByStatusOrderByOccurredOn(int status, int from, int size) {
+        return eventSourcingRepository.findByStatusOrderByOccurredOn(status, from, size);
     }
 }

@@ -1,6 +1,6 @@
 package cn.mayu.yugioh.postman.port.adapter.mq;
 
-import cn.mayu.yugioh.postman.domain.aggregate.EventSourcing;
+import cn.mayu.yugioh.common.basic.domain.DomainEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.messaging.support.MessageBuilder;
@@ -11,7 +11,7 @@ public class EventPublisher {
     @Autowired
     private EventOutStream eventOutStream;
 
-    public boolean publish(EventSourcing eventSourcing) {
-        return eventOutStream.eventOutput().send(MessageBuilder.withPayload(eventSourcing).build(), 3000L);
+    public boolean publish(DomainEvent domainEvent) {
+        return eventOutStream.eventOutput().send(MessageBuilder.withPayload(domainEvent).build(), 3000L);
     }
 }
