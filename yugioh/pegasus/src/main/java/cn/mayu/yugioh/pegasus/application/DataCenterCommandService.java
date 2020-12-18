@@ -28,7 +28,7 @@ public class DataCenterCommandService {
         while (cardIterator.hasNext()) {
             List<MetaData> metaData = cardIterator.next();
             for(MetaData data : metaData) {
-                data.commitTo();
+                data.commitTo(cardListCreateCommand.getChannelId(), cardListCreateCommand.getDataCenter());
             }
         }
     }

@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>cn.mayu</groupId>
-            <artifactId>postman-facade</artifactId>
+            <artifactId>hermes-facade</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

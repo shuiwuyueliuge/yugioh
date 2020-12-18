@@ -32,7 +32,8 @@ public class IncludeCreateEventConsumer implements DomainEventConsumer {
                     domainEvent.getType(),
                     includeDTO,
                     domainEvent.getSource(),
-                    includeDTO.getPassword()
+                    includeDTO.getPassword(),
+                    domainEvent.getDataCenterEnum()
             );
 
             eventFacade.receiveEvent(new EventReceiveCommand(cardDTODomainEvent));
@@ -41,7 +42,7 @@ public class IncludeCreateEventConsumer implements DomainEventConsumer {
 
     @Override
     public String getEventType() {
-        return "include";
+        return "include-meta";
     }
 }
 

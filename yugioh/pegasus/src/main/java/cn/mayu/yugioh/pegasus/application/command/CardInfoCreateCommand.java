@@ -11,4 +11,6 @@ import lombok.NoArgsConstructor;
 public class CardInfoCreateCommand {
 
     private DataCenterEnum dataCenter;
+
+    private String channelId;
 }

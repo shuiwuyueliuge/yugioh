@@ -13,9 +13,11 @@
     <modules>
         <module>pegasus</module>
         <module>common</module>
-        <module>postman</module>
+        <module>hermes</module>
         <module>register-center</module>
-        <module>library</module>
+        <module>minerva</module>
+        <module>aetos-kaukasios</module>
+        <module>horae</module>
     </modules>
 
     <properties>

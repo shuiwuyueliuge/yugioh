@@ -34,14 +34,18 @@ public class DomainEvent<T> extends EventObject implements Serializable {
      */
     private String routingKey;
 
+    private Object dataCenterEnum;
+
     public DomainEvent(long eventId, long occurredOn, String type,
-                       T body, Object source, String routingKey) {
+                       T body, Object source, String routingKey,
+                       Object dataCenterEnum) {
         super(source);
         this.eventId = eventId;
         this.occurredOn = occurredOn;
         this.type = type;
         this.body = body;
         this.routingKey = routingKey;
+        this.dataCenterEnum = dataCenterEnum;
     }
 
     public DomainEvent() {

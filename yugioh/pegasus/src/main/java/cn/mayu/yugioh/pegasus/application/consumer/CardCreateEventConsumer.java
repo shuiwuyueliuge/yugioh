@@ -21,21 +21,23 @@ public class CardCreateEventConsumer implements DomainEventConsumer {
 
     @Override
     public void subscribe(DomainEvent domainEvent) {
-        CardDTO cardDTO = dataCenterStrategy.findDataCenter((DataCenterEnum) domainEvent.getSource()).getCardData().data2CardDTO(domainEvent.getBody().toString());
+        CardDTO cardDTO = dataCenterStrategy.findDataCenter((DataCenterEnum) domainEvent.getDataCenterEnum()).getCardData().data2CardDTO(domainEvent.getBody().toString());
         DomainEvent<CardDTO> cardDTODomainEvent = new DomainEvent<>(
                 domainEvent.getEventId(),
                 domainEvent.getOccurredOn(),
                 domainEvent.getType(),
                 cardDTO,
                 domainEvent.getSource(),
-                cardDTO.getPassword()
+                cardDTO.getPassword(),
+                domainEvent.getDataCenterEnum()
         );
+
         eventFacade.receiveEvent(new EventReceiveCommand(cardDTODomainEvent));
     }
 
     @Override
     public String getEventType() {
-        return "card";
+        return "card-meta";
     }
 }
 

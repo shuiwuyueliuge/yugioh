@@ -27,7 +27,7 @@ public class EventDO {
     @Column(name = "type")
     private String type;
 
-    @Column(name = "body", length = 5000)
+    @Column(name = "body", columnDefinition="TEXT")
     private String body;
 
     public EventDO(Long eventId, Long occurredOn, String type, String body) {

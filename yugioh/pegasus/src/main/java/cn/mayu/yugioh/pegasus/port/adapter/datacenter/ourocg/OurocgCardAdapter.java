@@ -18,7 +18,7 @@ public class OurocgCardAdapter {
                 data.put("password", HashGenerator.createHashStr(data.get("name")));
             }
 
-            MetaDataIdentity metaDataIdentity = new MetaDataIdentity(data.get("password"), DataCenterEnum.OUROCG, "card");
+            MetaDataIdentity metaDataIdentity = new MetaDataIdentity(data.get("password"), DataCenterEnum.OUROCG, "card-meta");
             return new MetaData(metaDataIdentity, JsonConstructor.defaultInstance().writeValueAsString(data));
         }).collect(Collectors.toList());
     }
