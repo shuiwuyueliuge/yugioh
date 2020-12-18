@@ -99,11 +99,13 @@ public class MqDataThreadPool {
         public void run() {
             if ("card-meta".equals(domainEvent.getType())) {
                 CardCreateCommand cardCreateCommand = JsonParser.builder().failOnUnknownProperties(false).build().readObjectValue(domainEvent.getBody().toString(), CardCreateCommand.class);
+                cardCreateCommand.setChannel(domainEvent.getSource().toString());
                 cardCommandService.createCard(cardCreateCommand);
             }
 
             if ("include-meta".equals(domainEvent.getType())) {
                 IncludeCreateCommand includeCreateCommand = JsonParser.builder().failOnUnknownProperties(false).build().readObjectValue(domainEvent.getBody().toString(), IncludeCreateCommand.class);
+                includeCreateCommand.setChannel(domainEvent.getSource().toString());
                 includeCommandService.createInclude(includeCreateCommand);
             }
 

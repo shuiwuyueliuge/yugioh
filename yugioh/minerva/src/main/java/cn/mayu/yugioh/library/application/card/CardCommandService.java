@@ -18,6 +18,6 @@ public class CardCommandService {
                 cardCreateCommand.getLinkArrow());
         Card card = new Card(cardIdentity, name, monster, description, cardCreateCommand.getImgUrl(),
                 cardCreateCommand.getTypeSt(), cardCreateCommand.getAdjust(), cardCreateCommand.getTypeVal());
-        card.commitTo();
+        card.commitTo(cardCreateCommand.getChannel());
     }
 }

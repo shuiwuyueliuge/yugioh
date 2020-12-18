@@ -45,10 +45,23 @@ public class CardEventConsumer implements DomainEventConsumer<Card> {
                 domainEvent.getType(),
                 cardDTO,
                 domainEvent.getSource(),
-                cardDTO.getPassword()
+                cardDTO.getPassword(),
+                null
         );
 
         eventFacade.receiveEvent(new EventReceiveCommand(cardDTODomainEvent));
+
+        DomainEvent<CardDTO> msgDomainEvent = new DomainEvent<>(
+                domainEvent.getEventId(),
+                domainEvent.getOccurredOn(),
+                "msg",
+                cardDTO,
+                domainEvent.getSource(),
+                cardDTO.getPassword(),
+                null
+        );
+
+        eventFacade.receiveEvent(new EventReceiveCommand(msgDomainEvent));
     }
 
     @Override

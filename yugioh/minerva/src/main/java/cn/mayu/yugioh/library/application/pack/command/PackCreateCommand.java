@@ -14,4 +14,6 @@ public class PackCreateCommand {
     private String saleDate;
 
     private String packShortName;
+
+    private String channel;
 }

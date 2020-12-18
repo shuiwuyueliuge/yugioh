@@ -11,6 +11,6 @@ public class PackageCommandService {
     public void createPackage(PackCreateCommand packCreateCommand) {
         CardPackageIdentity cardPackageIdentity = new CardPackageIdentity(packCreateCommand.getPackageName(), packCreateCommand.getPackShortName());
         CardPackage cardPackage = new CardPackage(cardPackageIdentity, packCreateCommand.getSaleDate());
-        cardPackage.commitTo();
+        cardPackage.commitTo(packCreateCommand.getChannel());
     }
 }

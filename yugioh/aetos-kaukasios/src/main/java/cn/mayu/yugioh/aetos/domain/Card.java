@@ -37,7 +37,8 @@ public class Card extends Entity {
                 "card-index",
                 this,
                 this,
-                cardIdentity.getPassword()
+                cardIdentity.getPassword(),
+                null
         ));
     }
 }

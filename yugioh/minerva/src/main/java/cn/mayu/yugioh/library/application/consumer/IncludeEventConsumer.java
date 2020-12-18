@@ -24,7 +24,7 @@ public class IncludeEventConsumer implements DomainEventConsumer<Include> {
         includeRepository.store(include);
         PackCreateCommand packCreateCommand = new PackCreateCommand(include.getPackageIdentity().getPackageName(),
                 include.getIncludeTime(),
-                include.getPackageIdentity().getPackShortName());
+                include.getPackageIdentity().getPackShortName(), domainEvent.getSource().toString());
         packageCommandService.createPackage(packCreateCommand);
     }
 

@@ -18,15 +18,16 @@ public class CardPackage extends Entity {
 
     private String saleDate;
 
-    public void commitTo() {
+    public void commitTo(String channel) {
         DomainEventPublisher eventPublisher = BeanManager.getBean(DomainEventPublisher.class);
         eventPublisher.publishEvent(new DomainEvent(
                 SnowFlake.nextId(),
                 System.currentTimeMillis(),
                 "package",
                 this,
-                this,
-                packageIdentity.getPackageName()
+                channel,
+                packageIdentity.getPackageName(),
+                null
         ));
     }
 }

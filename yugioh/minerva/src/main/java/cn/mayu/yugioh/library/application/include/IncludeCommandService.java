@@ -20,6 +20,6 @@ public class IncludeCommandService {
                 includeCreateCommand.getRare(),
                 includeCreateCommand.getPackShortName(),
                 includeCreateCommand.getPassword());
-        include.commitTo();
+        include.commitTo(includeCreateCommand.getChannel());
     }
 }

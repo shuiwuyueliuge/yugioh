@@ -28,15 +28,16 @@ public class Include extends Entity {
 
     private String includeTime;
 
-    public void commitTo() {
+    public void commitTo(String channel) {
         DomainEventPublisher eventPublisher = BeanManager.getBean(DomainEventPublisher.class);
         eventPublisher.publishEvent(new DomainEvent(
                 SnowFlake.nextId(),
                 System.currentTimeMillis(),
                 "include",
                 this,
-                this,
-                cardIdentity.getPassword()
+                channel,
+                cardIdentity.getPassword(),
+                null
         ));
     }
 }

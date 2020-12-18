@@ -39,15 +39,16 @@ public class Card extends Entity {
     // 卡类型
     private String typeVal;
 
-    public void commitTo() {
+    public void commitTo(String channel) {
         DomainEventPublisher eventPublisher = BeanManager.getBean(DomainEventPublisher.class);
         eventPublisher.publishEvent(new DomainEvent(
                 SnowFlake.nextId(),
                 System.currentTimeMillis(),
                 "card-create",
                 this,
-                this,
-                cardIdentity.getPassword()
+                channel,
+                cardIdentity.getPassword(),
+                null
         ));
     }
 }
