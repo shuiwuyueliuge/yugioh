@@ -1,4 +1,4 @@
-package cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg;
+package cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg.html;
 
 import cn.mayu.yugioh.common.basic.html.DefaultHtmlHandler;
 import cn.mayu.yugioh.common.basic.html.HtmlParser;

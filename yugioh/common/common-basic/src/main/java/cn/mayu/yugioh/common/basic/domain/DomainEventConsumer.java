@@ -5,8 +5,8 @@ public interface DomainEventConsumer<T> {
     void subscribe(DomainEvent<T> domainEvent);
 
     /**
-     * 获取事件类型
+     * 匹配是否拦截事件
      * @return 事件类型
      */
-    String getEventType();
+    boolean matchEvent(String type);
 }

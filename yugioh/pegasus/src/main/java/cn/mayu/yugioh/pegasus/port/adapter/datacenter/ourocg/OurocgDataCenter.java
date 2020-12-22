@@ -2,6 +2,8 @@ package cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg;
 
 import cn.mayu.yugioh.pegasus.application.datacenter.*;
 import cn.mayu.yugioh.common.basic.html.HtmlHandler;
+import cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg.html.CardInfoHtmlHandler;
+import cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg.html.IncludeInfoHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import java.util.List;
@@ -11,9 +13,9 @@ import java.util.Map;
 @Component
 public class OurocgDataCenter extends AbstractDataCenterFactory {
 
-    private HtmlHandler<List<Map<String, String>>> cardInfoHtmlHandler;
+    private final HtmlHandler<List<Map<String, String>>> cardInfoHtmlHandler;
 
-    private HtmlHandler<Map<String, Object>> includeHtmlHandler;
+    private final HtmlHandler<Map<String, Object>> includeHtmlHandler;
 
     public OurocgDataCenter() {
         this.cardInfoHtmlHandler = new CardInfoHtmlHandler();
@@ -22,12 +24,12 @@ public class OurocgDataCenter extends AbstractDataCenterFactory {
 
     @Override
     public CardData getCardData() {
-        return new OurocgCardDataCenter(cardInfoHtmlHandler, includeHtmlHandler);
+        return new OurocgDataFinder(cardInfoHtmlHandler, includeHtmlHandler);
     }
 
     @Override
     public IncludeData getIncludeData() {
-        return new OurocgIncludeDataCenter();
+        return new OurocgDataFinder(cardInfoHtmlHandler, includeHtmlHandler);
     }
 
     @Override

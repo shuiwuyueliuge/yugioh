@@ -5,7 +5,6 @@ import cn.mayu.yugioh.common.basic.domain.DomainEventPublisher;
 import cn.mayu.yugioh.common.basic.domain.Entity;
 import cn.mayu.yugioh.common.basic.tool.BeanManager;
 import cn.mayu.yugioh.common.basic.tool.SnowFlake;
-import cn.mayu.yugioh.pegasus.application.datacenter.DataCenterEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,16 +23,15 @@ public class MetaData extends Entity {
     /**
      * 发布领域事件
      */
-    public void commitTo(String channel, DataCenterEnum dataCenterEnum) {
+    public void commitTo(String channel, Object changeObj) {
         DomainEventPublisher eventPublisher = BeanManager.getBean(DomainEventPublisher.class);
         eventPublisher.publishEvent(new DomainEvent(
                 SnowFlake.nextId(),
                 System.currentTimeMillis(),
                 metaDataIdentity.getType(),
-                data,
+                changeObj,
                 channel,
-                metaDataIdentity.getKey(),
-                dataCenterEnum
+                metaDataIdentity.getKey()
         ));
     }
 }

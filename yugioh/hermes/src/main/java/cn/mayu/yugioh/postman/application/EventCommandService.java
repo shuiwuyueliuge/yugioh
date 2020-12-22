@@ -29,8 +29,7 @@ public class EventCommandService {
                 eventSourcing.getType(),
                 eventSourcing.getBody(),
                 "",
-                eventSourcing.getRoutingKey(),
-                null
+                eventSourcing.getRoutingKey()
         );
 
         boolean publishSuccess = eventPublisherStrategyContext.publish(domainEvent);
