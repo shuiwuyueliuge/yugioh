@@ -1,10 +1,8 @@
 package cn.mayu.yugioh.library.domain.aggregate.include;
 
-import cn.mayu.yugioh.common.basic.domain.DomainEvent;
 import cn.mayu.yugioh.common.basic.domain.DomainEventPublisher;
 import cn.mayu.yugioh.common.basic.domain.Entity;
 import cn.mayu.yugioh.common.basic.tool.BeanManager;
-import cn.mayu.yugioh.common.basic.tool.SnowFlake;
 import cn.mayu.yugioh.library.domain.aggregate.card.CardIdentity;
 import cn.mayu.yugioh.library.domain.aggregate.packages.CardPackageIdentity;
 import lombok.AllArgsConstructor;
@@ -28,16 +26,13 @@ public class Include extends Entity {
 
     private String includeTime;
 
-    public void commitTo(String channel) {
+    public void createInclude() {
         DomainEventPublisher eventPublisher = BeanManager.getBean(DomainEventPublisher.class);
-        eventPublisher.publishEvent(new DomainEvent(
-                SnowFlake.nextId(),
-                System.currentTimeMillis(),
-                "include",
-                this,
-                channel,
-                cardIdentity.getPassword(),
-                null
+        eventPublisher.publishEvent(new IncludeCreated(
+                includeIdentity,
+                packageIdentity.getPackageName(),
+                packageIdentity.getPackShortName(),
+                includeTime
         ));
     }
 }

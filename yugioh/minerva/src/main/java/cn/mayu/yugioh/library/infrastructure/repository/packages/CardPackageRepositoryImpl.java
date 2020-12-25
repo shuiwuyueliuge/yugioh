@@ -19,10 +19,10 @@ public class CardPackageRepositoryImpl implements CardPackageRepository {
                 body.getPackageIdentity().getPackShortName()
         );
 
-        PackageDO saved = jpaCardPackageRepository.findByPackageName(body.getPackageIdentity().getPackageName());
-        if (saved != null) {
-            packageDO.setId(saved.getId());
-        }
+//        PackageDO saved = jpaCardPackageRepository.findByPackageName(body.getPackageIdentity().getPackageName());
+//        if (saved != null) {
+//            packageDO.setId(saved.getId());
+//        }
 
         jpaCardPackageRepository.save(packageDO);
     }

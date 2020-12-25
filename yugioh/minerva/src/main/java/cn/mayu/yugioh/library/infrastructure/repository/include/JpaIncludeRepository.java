@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaIncludeRepository extends JpaRepository<IncludeDO, Long> {
 
-    IncludeDO findByPackageNameAndPasswordAndRare(String packageName, String password, String rare);
+//    IncludeDO findByPackageNameAndPasswordAndRare(String packageName, String password, String rare);
 }

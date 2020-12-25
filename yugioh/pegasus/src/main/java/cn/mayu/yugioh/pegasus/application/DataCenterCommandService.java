@@ -1,9 +1,11 @@
 package cn.mayu.yugioh.pegasus.application;
 
 import cn.mayu.yugioh.pegasus.application.command.CardInfoCreateCommand;
+import cn.mayu.yugioh.pegasus.application.command.IncludeInfoCreateCommand;
 import cn.mayu.yugioh.pegasus.application.datacenter.DataCenterFactory;
 import cn.mayu.yugioh.pegasus.application.datacenter.DataCenterStrategy;
-import cn.mayu.yugioh.pegasus.application.datacenter.EventEnum;
+import cn.mayu.yugioh.pegasus.application.dto.CardDTO;
+import cn.mayu.yugioh.pegasus.application.dto.IncludeDTO;
 import cn.mayu.yugioh.pegasus.domain.aggregate.MetaData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,22 +28,29 @@ public class DataCenterCommandService {
         // 获取数据中心
         DataCenterFactory dataCenter = dataCenterStrategy.findDataCenter(cardListCreateCommand.getDataCenter());
         // 获取卡片信息
-        Iterator<List<MetaData>> cardIterator = dataCenter.getCardData().obtainCards();
+        Iterator<List<MetaData<CardDTO>>> cardIterator = dataCenter.getCardData().obtainCards();
         while (cardIterator.hasNext()) {
-            List<MetaData> metaData = cardIterator.next();
+            List<MetaData<CardDTO>> metaData = cardIterator.next();
             for (MetaData data : metaData) {
                 // 对每个卡片发布领域事件
-                Object changeObj = null;
-                if (EventEnum.CARD.getType().equals(data.getMetaDataIdentity().getType())) {
-                    changeObj = dataCenter.getCardData().data2CardDTO(data.getData());
-                }
-
-                if (EventEnum.INCLUDE.getType().equals(data.getMetaDataIdentity().getType())) {
-                    changeObj = dataCenter.getIncludeData().data2IncludeDTO(data.getData());
-                }
-
-                data.commitTo(cardListCreateCommand.getChannelId(), changeObj);
+                data.createMetaData(cardListCreateCommand.getChannelId());
             }
         }
+    }
+
+    public void createIncludeInfo(IncludeInfoCreateCommand includeInfoCreateCommand) {
+        // 获取数据中心
+        DataCenterFactory dataCenter = dataCenterStrategy.findDataCenter(includeInfoCreateCommand.getDataCenter());
+        // 获取收录信息
+        List<MetaData<IncludeDTO>> metaDataList = dataCenter.getIncludeData().obtainIncludes(
+                includeInfoCreateCommand.getCardPassword(),
+                includeInfoCreateCommand.getResource()
+        );
+
+        if (metaDataList.size() == 0) {
+            return;
+        }
+
+        metaDataList.forEach(metaData -> metaData.createMetaData(includeInfoCreateCommand.getChannelId()));
     }
 }

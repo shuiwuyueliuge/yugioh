@@ -26,11 +26,8 @@ public class EventSourcingDO {
     @Column(name = "type")
     private String type;
 
-    @Column(name = "source")
-    private String source;
-
-    @Column(name = "body", columnDefinition="TEXT")
-    private String body;
+    @Column(name = "payload", columnDefinition="TEXT")
+    private String payload;
 
     @Column(name = "status")
     private Integer status;
@@ -38,13 +35,16 @@ public class EventSourcingDO {
     @Column(name = "routing_key")
     private String routingKey;
 
-    public EventSourcingDO(Long eventId, Long occurredOn, String type, String body, Integer status, String routingKey, String source) {
+    @Column(name = "channel")
+    private String channel;
+
+    public EventSourcingDO(Long eventId, Long occurredOn, String type, String payload, Integer status, String routingKey, String channel) {
         this.eventId = eventId;
         this.occurredOn = occurredOn;
         this.type = type;
-        this.body = body;
+        this.payload = payload;
         this.status = status;
         this.routingKey = routingKey;
-        this.source = source;
+        this.channel = channel;
     }
 }

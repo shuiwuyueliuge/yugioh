@@ -9,7 +9,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "t_include")
+@Table(name = "t_include", uniqueConstraints =
+    @UniqueConstraint(columnNames = {"package_name", "password", "rare"})
+)
 public class IncludeDO {
 
     @Id

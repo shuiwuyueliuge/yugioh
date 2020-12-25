@@ -1,10 +1,8 @@
 package cn.mayu.yugioh.pegasus.domain.aggregate;
 
-import cn.mayu.yugioh.common.basic.domain.DomainEvent;
 import cn.mayu.yugioh.common.basic.domain.DomainEventPublisher;
 import cn.mayu.yugioh.common.basic.domain.Entity;
 import cn.mayu.yugioh.common.basic.tool.BeanManager;
-import cn.mayu.yugioh.common.basic.tool.SnowFlake;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,24 +12,21 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class MetaData extends Entity {
+public class MetaData<T> extends Entity {
 
     private MetaDataIdentity metaDataIdentity;
 
-    private String data;
+    private T data;
 
     /**
-     * 发布领域事件
+     * 创建源数据
      */
-    public void commitTo(String channel, Object changeObj) {
+    public void createMetaData(String channel) {
         DomainEventPublisher eventPublisher = BeanManager.getBean(DomainEventPublisher.class);
-        eventPublisher.publishEvent(new DomainEvent(
-                SnowFlake.nextId(),
-                System.currentTimeMillis(),
-                metaDataIdentity.getType(),
-                changeObj,
-                channel,
-                metaDataIdentity.getKey()
+        eventPublisher.publishEvent(new MetaDataCreated(
+                metaDataIdentity,
+                data,
+                channel
         ));
     }
 }

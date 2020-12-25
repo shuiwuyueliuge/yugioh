@@ -2,11 +2,16 @@ package cn.mayu.yugioh.aetos.application;
 
 import cn.mayu.yugioh.aetos.domain.Card;
 import cn.mayu.yugioh.aetos.domain.CardIdentity;
+import cn.mayu.yugioh.aetos.domain.CardRepository;
 import cn.mayu.yugioh.aetos.domain.Monster;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CardCommandService {
+
+    @Autowired
+    private CardRepository cardRepository;
 
     public void createCard(CardCreateCommand cardCreateCommand) {
         CardIdentity cardIdentity = new CardIdentity(cardCreateCommand.getPassword());
@@ -30,6 +35,6 @@ public class CardCommandService {
                 cardCreateCommand.getTypeSt()
         );
 
-        card.commitTo();
+        cardRepository.store(card);
     }
 }

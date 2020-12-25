@@ -2,7 +2,7 @@ package cn.mayu.yugioh.aetos.port.adapter.mq;
 
 import cn.mayu.yugioh.aetos.application.CardCommandService;
 import cn.mayu.yugioh.aetos.application.CardCreateCommand;
-import cn.mayu.yugioh.common.basic.domain.DomainEvent;
+import cn.mayu.yugioh.common.basic.domain.RemoteDomainEvent;
 import cn.mayu.yugioh.common.basic.tool.JsonParser;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -20,8 +20,9 @@ public class CardCreateEventReceiver {
 
 	@StreamListener(CardCreateInputStream.CARD_CREATE_INPUT)
 	public void receiveSave(Message<String> message) {
-		DomainEvent domainEvent = JsonParser.defaultInstance().readObjectValue(message.getPayload(), DomainEvent.class);
-		CardCreateCommand cardCreateCommand = JsonParser.builder().failOnUnknownProperties(false).build().readObjectValue(domainEvent.getBody().toString(), CardCreateCommand.class);
+		RemoteDomainEvent domainEvent = JsonParser.defaultInstance().readObjectValue(message.getPayload(), RemoteDomainEvent.class);
+		CardCreateCommand cardCreateCommand = JsonParser.builder().failOnUnknownProperties(false).build()
+				.readObjectValue(domainEvent.getPayload(), CardCreateCommand.class);
 		cardCommandService.createCard(cardCreateCommand);
 		basicAck(message);
 	}

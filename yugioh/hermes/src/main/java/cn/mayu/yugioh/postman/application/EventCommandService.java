@@ -1,6 +1,6 @@
 package cn.mayu.yugioh.postman.application;
 
-import cn.mayu.yugioh.common.basic.domain.DomainEvent;
+import cn.mayu.yugioh.common.basic.domain.RemoteDomainEvent;
 import cn.mayu.yugioh.common.facade.postman.commond.EventReceiveCommand;
 import cn.mayu.yugioh.postman.domain.aggregate.EventSourcing;
 import cn.mayu.yugioh.postman.domain.aggregate.EventSourcingRepository;
@@ -23,13 +23,12 @@ public class EventCommandService {
     }
 
     public void publishEvent(EventSourcing eventSourcing) {
-        DomainEvent domainEvent = new DomainEvent(
-                eventSourcing.getEventId(),
+        RemoteDomainEvent domainEvent = new RemoteDomainEvent(
                 eventSourcing.getOccurredOn(),
                 eventSourcing.getType(),
-                eventSourcing.getBody(),
-                "",
-                eventSourcing.getRoutingKey()
+                eventSourcing.getPayload(),
+                eventSourcing.getRoutingKey(),
+                eventSourcing.getChannel()
         );
 
         boolean publishSuccess = eventPublisherStrategyContext.publish(domainEvent);

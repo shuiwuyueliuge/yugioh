@@ -10,10 +10,5 @@ public interface CardData extends DataType {
     /**
      * 获取卡片信息
      */
-    Iterator<List<MetaData>> obtainCards();
-
-    /**
-     * 卡片数据转换
-     */
-    CardDTO data2CardDTO(String cardData);
+    Iterator<List<MetaData<CardDTO>>> obtainCards();
 }

@@ -20,6 +20,4 @@ public class IncludeCreateCommand {
     private String packShortName;
 
     private String password;
-
-    private String channel;
 }

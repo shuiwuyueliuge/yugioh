@@ -20,10 +20,10 @@ public class EventSourcingRepositoryImpl implements EventSourcingRepository {
                 eventSourcing.getEventId(),
                 eventSourcing.getOccurredOn(),
                 eventSourcing.getType(),
-                eventSourcing.getBody(),
+                eventSourcing.getPayload(),
                 eventSourcing.getStatus(),
                 eventSourcing.getRoutingKey(),
-                eventSourcing.getSource()
+                eventSourcing.getChannel()
         );
 
         EventSourcingDO saved = jpaEventSourcingRepository.findByEventId(eventSourcing.getEventId());
@@ -40,11 +40,11 @@ public class EventSourcingRepositoryImpl implements EventSourcingRepository {
         return eventList.stream().map(data -> new EventSourcing(
                 data.getEventId(),
                 data.getOccurredOn(),
-                data.getBody(),
+                data.getPayload(),
                 data.getType(),
                 data.getRoutingKey(),
-                data.getSource(),
-                data.getStatus()
+                data.getStatus(),
+                data.getChannel()
         )).collect(Collectors.toList());
     }
 }

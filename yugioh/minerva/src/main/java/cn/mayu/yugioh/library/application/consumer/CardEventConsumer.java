@@ -1,71 +1,51 @@
 package cn.mayu.yugioh.library.application.consumer;
 
-import cn.mayu.yugioh.common.basic.domain.DomainEvent;
-import cn.mayu.yugioh.common.basic.domain.DomainEventConsumer;
+import cn.mayu.yugioh.common.basic.domain.RemoteDomainEvent;
+import cn.mayu.yugioh.common.basic.domain.DomainEventSubscribe;
+import cn.mayu.yugioh.common.basic.tool.JsonConstructor;
 import cn.mayu.yugioh.common.facade.postman.EventFacade;
 import cn.mayu.yugioh.common.facade.postman.commond.EventReceiveCommand;
 import cn.mayu.yugioh.library.application.card.CardDTO;
-import cn.mayu.yugioh.library.domain.aggregate.card.Card;
-import cn.mayu.yugioh.library.domain.aggregate.card.CardRepository;
+import cn.mayu.yugioh.library.domain.aggregate.card.CardCreated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CardEventConsumer implements DomainEventConsumer<Card> {
-
-    @Autowired
-    private CardRepository cardRepository;
+public class CardEventConsumer implements DomainEventSubscribe<CardCreated> {
 
     @Autowired
     private EventFacade eventFacade;
 
     @Override
-    public void subscribe(DomainEvent<Card> domainEvent) {
-        cardRepository.store(domainEvent.getBody());
-        Card card = domainEvent.getBody();
+    public void subscribe(CardCreated cardCreated) {
         CardDTO cardDTO = new CardDTO(
-                card.getName().getName(),
-                card.getDescription().getDesc(),
-                card.getTypeVal(),
-                card.getMonster().getLink(),
-                card.getMonster().getDef(),
-                card.getMonster().getPend(),
-                card.getMonster().getRace(),
-                card.getCardIdentity().getPassword(),
-                card.getMonster().getAttribute(),
-                card.getMonster().getLevel(),
-                card.getMonster().getAtk(),
-                card.getTypeSt(),
-                card.getMonster().getLinkArrow()
+                cardCreated.getName(),
+                cardCreated.getDesc(),
+                cardCreated.getTypeVal(),
+                cardCreated.getLink(),
+                cardCreated.getDef(),
+                cardCreated.getPend(),
+                cardCreated.getRace(),
+                cardCreated.getCardIdentity().getPassword(),
+                cardCreated.getAttribute(),
+                cardCreated.getLevel(),
+                cardCreated.getAtk(),
+                cardCreated.getTypeSt(),
+                cardCreated.getLinkArrow()
         );
 
-        DomainEvent<CardDTO> cardDTODomainEvent = new DomainEvent<>(
-                domainEvent.getEventId(),
-                domainEvent.getOccurredOn(),
-                domainEvent.getType(),
-                cardDTO,
-                domainEvent.getSource(),
-                cardDTO.getPassword(),
-                null
+        RemoteDomainEvent domainEvent = new RemoteDomainEvent(
+                cardCreated.occurredOn(),
+                cardCreated.getEventType(),
+                JsonConstructor.defaultInstance().writeValueAsString(cardDTO),
+                cardDTO.getPassword()
         );
 
-        eventFacade.receiveEvent(new EventReceiveCommand(cardDTODomainEvent));
-
-        DomainEvent<CardDTO> msgDomainEvent = new DomainEvent<>(
-                domainEvent.getEventId(),
-                domainEvent.getOccurredOn(),
-                "msg",
-                cardDTO,
-                domainEvent.getSource(),
-                cardDTO.getPassword(),
-                null
-        );
-
-        eventFacade.receiveEvent(new EventReceiveCommand(msgDomainEvent));
+        eventFacade.receiveEvent(new EventReceiveCommand(domainEvent));
     }
 
     @Override
-    public String getEventType() {
-        return "card-create";
+    public Class<CardCreated> domainEventClass() {
+        return CardCreated.class;
     }
 }

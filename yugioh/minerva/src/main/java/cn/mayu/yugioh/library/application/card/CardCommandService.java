@@ -2,10 +2,14 @@ package cn.mayu.yugioh.library.application.card;
 
 import cn.mayu.yugioh.library.application.card.command.CardCreateCommand;
 import cn.mayu.yugioh.library.domain.aggregate.card.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CardCommandService {
+
+    @Autowired
+    private CardRepository cardRepository;
 
     public void createCard(CardCreateCommand cardCreateCommand) {
         CardIdentity cardIdentity = new CardIdentity(cardCreateCommand.getPassword());
@@ -18,6 +22,7 @@ public class CardCommandService {
                 cardCreateCommand.getLinkArrow());
         Card card = new Card(cardIdentity, name, monster, description, cardCreateCommand.getImgUrl(),
                 cardCreateCommand.getTypeSt(), cardCreateCommand.getAdjust(), cardCreateCommand.getTypeVal());
-        card.commitTo(cardCreateCommand.getChannel());
+        cardRepository.store(card);
+        card.createCard();
     }
 }

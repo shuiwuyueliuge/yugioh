@@ -73,6 +73,4 @@ public class CardCreateCommand {
 
     // 卡类型
     private String typeVal;
-
-    private String channel;
 }

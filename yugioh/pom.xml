@@ -22,8 +22,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-boot.version>2.2.11.RELEASE</spring-boot.version>
-        <spring-cloud.version>Hoxton.SR9</spring-cloud.version>
+        <spring-boot.version>2.4.1</spring-boot.version>
+        <spring-cloud.version>2020.0.0</spring-cloud.version>
         <java.version>1.8</java.version>
 <!--        <dockerHost>http://172.17.237.151:2375</dockerHost>-->
 <!--        <nexus3Host>127.0.0.1:8082</nexus3Host>-->

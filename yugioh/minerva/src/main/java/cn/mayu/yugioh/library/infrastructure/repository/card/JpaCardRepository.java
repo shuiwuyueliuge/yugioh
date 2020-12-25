@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaCardRepository extends JpaRepository<CardDO, Long> {
 
-    CardDO findByPassword(String password);
+//    CardDO findByPassword(String password);
 }

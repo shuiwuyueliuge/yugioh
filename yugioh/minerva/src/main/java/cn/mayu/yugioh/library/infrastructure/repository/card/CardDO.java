@@ -9,7 +9,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "t_card")
+@Table(name = "t_card", uniqueConstraints =
+    @UniqueConstraint(columnNames = {"password"})
+)
 public class CardDO {
 
     @Id

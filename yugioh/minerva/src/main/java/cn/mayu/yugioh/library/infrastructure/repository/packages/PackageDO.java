@@ -9,7 +9,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "t_package")
+@Table(name = "t_package", uniqueConstraints =
+    @UniqueConstraint(columnNames = {"package_name"})
+)
 public class PackageDO {
 
     @Id

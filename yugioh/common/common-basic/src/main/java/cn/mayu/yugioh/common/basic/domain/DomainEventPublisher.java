@@ -1,7 +1,5 @@
 package cn.mayu.yugioh.common.basic.domain;
 
-import cn.mayu.yugioh.common.basic.event.sourcing.EventStore;
-import com.google.common.collect.Lists;
 import java.util.List;
 
 /**
@@ -9,31 +7,19 @@ import java.util.List;
  */
 public class DomainEventPublisher {
 
-    private List<DomainEventConsumer> consumers;
+    private final List<DomainEventSubscribe> subscribes;
 
-    private EventStore eventStore;
-
-    public DomainEventPublisher(EventStore eventStore, List<DomainEventConsumer> eventConsumers) {
-        this.eventStore = eventStore;
-        this.consumers = eventConsumers;
+    public DomainEventPublisher(List<DomainEventSubscribe> subscribes) {
+        this.subscribes = subscribes;
     }
 
     public void publishEvent(DomainEvent domainEvent) {
-        eventStore.store(domainEvent);
-        if (consumers == null) {
+        if (subscribes == null || subscribes.size() == 0) {
             return;
         }
 
-        consumers.stream().filter(consumer -> consumer.matchEvent(domainEvent.getType())).forEach(consumer -> consumer.subscribe(domainEvent));
-    }
-
-    public void register(DomainEventConsumer eventConsumer) {
-        synchronized (DomainEventPublisher.class) {
-            if (consumers == null) {
-                consumers = Lists.newArrayList();
-            }
-        }
-
-        consumers.add(eventConsumer);
+        Class<?> eventClass = domainEvent.getClass();
+        subscribes.stream().filter(consumer -> consumer.domainEventClass() == eventClass)
+                .forEach(consumer -> consumer.subscribe(domainEvent));
     }
 }

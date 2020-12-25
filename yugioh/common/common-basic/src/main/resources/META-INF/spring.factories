@@ -1,3 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-cn.mayu.yugioh.common.basic.domain.EventBusConfiguration,\
+cn.mayu.yugioh.common.basic.domain.DomainEventPublisher,\
 cn.mayu.yugioh.common.basic.tool.BeanManager

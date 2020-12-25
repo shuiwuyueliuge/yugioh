@@ -1,5 +1,6 @@
 package cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg;
 
+import cn.mayu.yugioh.pegasus.application.DataCenterCommandService;
 import cn.mayu.yugioh.pegasus.application.datacenter.*;
 import cn.mayu.yugioh.common.basic.html.HtmlHandler;
 import cn.mayu.yugioh.pegasus.port.adapter.datacenter.ourocg.html.CardInfoHtmlHandler;
@@ -17,19 +18,22 @@ public class OurocgDataCenter extends AbstractDataCenterFactory {
 
     private final HtmlHandler<Map<String, Object>> includeHtmlHandler;
 
-    public OurocgDataCenter() {
+    private final DataCenterCommandService dataCenterCommandService;
+
+    public OurocgDataCenter(DataCenterCommandService dataCenterCommandService) {
         this.cardInfoHtmlHandler = new CardInfoHtmlHandler();
         this.includeHtmlHandler = new IncludeInfoHandler();
+        this.dataCenterCommandService = dataCenterCommandService;
     }
 
     @Override
     public CardData getCardData() {
-        return new OurocgDataFinder(cardInfoHtmlHandler, includeHtmlHandler);
+        return new OurocgDataFinder(cardInfoHtmlHandler, includeHtmlHandler, dataCenterCommandService);
     }
 
     @Override
     public IncludeData getIncludeData() {
-        return new OurocgDataFinder(cardInfoHtmlHandler, includeHtmlHandler);
+        return new OurocgDataFinder(cardInfoHtmlHandler, includeHtmlHandler, dataCenterCommandService);
     }
 
     @Override

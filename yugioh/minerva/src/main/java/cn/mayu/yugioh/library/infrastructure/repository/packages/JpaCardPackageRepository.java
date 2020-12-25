@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaCardPackageRepository extends JpaRepository<PackageDO, Long> {
 
-    PackageDO findByPackageName(String packageName);
+//    PackageDO findByPackageName(String packageName);
 }

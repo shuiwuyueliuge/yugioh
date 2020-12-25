@@ -1,6 +1,6 @@
 package cn.mayu.yugioh.postman.port.adapter.mq;
 
-import cn.mayu.yugioh.common.basic.domain.DomainEvent;
+import cn.mayu.yugioh.common.basic.domain.RemoteDomainEvent;
 import org.springframework.stereotype.Component;
 import java.util.Set;
 
@@ -13,7 +13,7 @@ public class EventPublisherStrategyContext {
         this.eventPublisherStrategies = eventPublisherStrategies;
     }
 
-    public boolean publish(DomainEvent domainEvent){
+    public boolean publish(RemoteDomainEvent domainEvent){
         for(EventPublisherStrategy publisher : eventPublisherStrategies) {
             if (domainEvent.getType().equals(publisher.eventType())) {
                 return publisher.publish(domainEvent);
