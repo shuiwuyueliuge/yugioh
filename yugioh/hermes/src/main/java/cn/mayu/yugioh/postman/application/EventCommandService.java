@@ -27,8 +27,7 @@ public class EventCommandService {
                 eventSourcing.getOccurredOn(),
                 eventSourcing.getType(),
                 eventSourcing.getPayload(),
-                eventSourcing.getRoutingKey(),
-                eventSourcing.getChannel()
+                eventSourcing.getRoutingKey()
         );
 
         boolean publishSuccess = eventPublisherStrategyContext.publish(domainEvent);

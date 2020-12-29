@@ -5,7 +5,7 @@ import org.springframework.messaging.SubscribableChannel;
 
 public interface MsgInputStream {
 	
-	String MSG_INPUT = "msg";
+	String MSG_INPUT = "task-msg";
 	
 	@Input(MSG_INPUT)
 	SubscribableChannel msgInput();

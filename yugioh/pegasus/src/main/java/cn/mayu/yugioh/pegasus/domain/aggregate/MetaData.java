@@ -21,12 +21,11 @@ public class MetaData<T> extends Entity {
     /**
      * 创建源数据
      */
-    public void createMetaData(String channel) {
+    public void createMetaData() {
         DomainEventPublisher eventPublisher = BeanManager.getBean(DomainEventPublisher.class);
         eventPublisher.publishEvent(new MetaDataCreated(
                 metaDataIdentity,
-                data,
-                channel
+                data
         ));
     }
 }

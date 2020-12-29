@@ -21,8 +21,7 @@ public class MetaEventSubscribe implements DomainEventSubscribe<MetaDataCreated>
                 metaDataCreated.occurredOn(),
                 metaDataCreated.getMetaDataIdentity().getType(),
                 JsonConstructor.defaultInstance().writeValueAsString(metaDataCreated.getData()),
-                metaDataCreated.getMetaDataIdentity().getKey(),
-                metaDataCreated.getOperateChannelId()
+                metaDataCreated.getMetaDataIdentity().getKey()
         );
 
         eventFacade.receiveEvent(new EventReceiveCommand(remoteDomainEvent));

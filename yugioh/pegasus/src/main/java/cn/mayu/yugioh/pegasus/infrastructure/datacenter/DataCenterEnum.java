@@ -1,4 +1,4 @@
-package cn.mayu.yugioh.pegasus.application.datacenter;
+package cn.mayu.yugioh.pegasus.infrastructure.datacenter;
 
 import java.util.Optional;
 import java.util.stream.Stream;

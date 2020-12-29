@@ -1,4 +1,4 @@
-package cn.mayu.yugioh.pegasus.application.datacenter;
+package cn.mayu.yugioh.pegasus.infrastructure.datacenter;
 
 import cn.mayu.yugioh.pegasus.application.dto.CardDTO;
 import cn.mayu.yugioh.pegasus.domain.aggregate.MetaData;

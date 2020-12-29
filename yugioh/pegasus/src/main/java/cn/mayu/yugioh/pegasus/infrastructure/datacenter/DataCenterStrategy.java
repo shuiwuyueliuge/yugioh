@@ -1,4 +1,4 @@
-package cn.mayu.yugioh.pegasus.application.datacenter;
+package cn.mayu.yugioh.pegasus.infrastructure.datacenter;
 
 import cn.mayu.yugioh.pegasus.exception.DataCenterNotFoundException;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Component
 public class DataCenterStrategy {
 
-    private Map<DataCenterEnum, DataCenterFactory> dataCenterMap;
+    private Map<String, DataCenterFactory> dataCenterMap;
 
     public DataCenterStrategy(DataCenterConfiguration configuration,
                               Set<DataCenterFactory> dataCenters) {
@@ -32,11 +32,11 @@ public class DataCenterStrategy {
             AbstractDataCenterFactory dataCenter = (AbstractDataCenterFactory) data;
             dataCenter.setProperty(property);
             return data;
-        }).collect(Collectors.toMap(data -> data.type(), Function.identity(), (a, b) -> a));
+        }).collect(Collectors.toMap(data -> data.type().name(), Function.identity(), (a, b) -> a));
     }
 
-    public DataCenterFactory findDataCenter(DataCenterEnum dataCenterEnum) {
-        DataCenterFactory dataCenter = dataCenterMap.get(dataCenterEnum);
+    public DataCenterFactory findDataCenter(String DataCenterEnumValue) {
+        DataCenterFactory dataCenter = dataCenterMap.get(DataCenterEnumValue);
         if (!dataCenter.exists()) {
             throw new DataCenterNotFoundException(dataCenter.type() + " not exists");
         }

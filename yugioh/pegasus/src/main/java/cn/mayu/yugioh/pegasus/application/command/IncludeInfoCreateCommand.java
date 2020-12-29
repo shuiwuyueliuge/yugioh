@@ -1,6 +1,6 @@
 package cn.mayu.yugioh.pegasus.application.command;
 
-import cn.mayu.yugioh.pegasus.application.datacenter.DataCenterEnum;
+import cn.mayu.yugioh.pegasus.infrastructure.datacenter.DataCenterEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

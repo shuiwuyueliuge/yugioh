@@ -34,7 +34,6 @@ public class EventSourcing extends Entity {
         this.payload = remoteDomainEvent.getPayload();
         this.type = remoteDomainEvent.getType();
         this.routingKey = remoteDomainEvent.getRoutingKey();
-        this.channel = remoteDomainEvent.getChannel();
         this.status = 0;
     }
 

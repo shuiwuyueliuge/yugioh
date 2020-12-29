@@ -2,15 +2,14 @@ package cn.mayu.yugioh.pegasus.application;
 
 import cn.mayu.yugioh.pegasus.application.command.CardInfoCreateCommand;
 import cn.mayu.yugioh.pegasus.application.command.IncludeInfoCreateCommand;
-import cn.mayu.yugioh.pegasus.application.datacenter.DataCenterFactory;
-import cn.mayu.yugioh.pegasus.application.datacenter.DataCenterStrategy;
-import cn.mayu.yugioh.pegasus.application.dto.CardDTO;
-import cn.mayu.yugioh.pegasus.application.dto.IncludeDTO;
-import cn.mayu.yugioh.pegasus.domain.aggregate.MetaData;
+import cn.mayu.yugioh.pegasus.domain.aggregate.TaskRepository;
+import cn.mayu.yugioh.pegasus.domain.aggregate.DataCenterTask;
+import cn.mayu.yugioh.pegasus.domain.aggregate.DataCenterTaskIdentity;
+import cn.mayu.yugioh.pegasus.exception.DataCenterTaskRunningException;
+import cn.mayu.yugioh.pegasus.infrastructure.datacenter.DataCenterEnum;
+import cn.mayu.yugioh.pegasus.infrastructure.datacenter.EventEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * 数据中心命令服务
@@ -19,38 +18,43 @@ import java.util.List;
 public class DataCenterCommandService {
 
     @Autowired
-    private DataCenterStrategy dataCenterStrategy;
+    private TaskRepository taskRepository;
 
     /**
      * 创建card目录
      */
     public void createCardList(CardInfoCreateCommand cardListCreateCommand) {
-        // 获取数据中心
-        DataCenterFactory dataCenter = dataCenterStrategy.findDataCenter(cardListCreateCommand.getDataCenter());
-        // 获取卡片信息
-        Iterator<List<MetaData<CardDTO>>> cardIterator = dataCenter.getCardData().obtainCards();
-        while (cardIterator.hasNext()) {
-            List<MetaData<CardDTO>> metaData = cardIterator.next();
-            for (MetaData data : metaData) {
-                // 对每个卡片发布领域事件
-                data.createMetaData(cardListCreateCommand.getChannelId());
-            }
-        }
-    }
-
-    public void createIncludeInfo(IncludeInfoCreateCommand includeInfoCreateCommand) {
-        // 获取数据中心
-        DataCenterFactory dataCenter = dataCenterStrategy.findDataCenter(includeInfoCreateCommand.getDataCenter());
-        // 获取收录信息
-        List<MetaData<IncludeDTO>> metaDataList = dataCenter.getIncludeData().obtainIncludes(
-                includeInfoCreateCommand.getCardPassword(),
-                includeInfoCreateCommand.getResource()
+        isRunning(cardListCreateCommand.getDataCenter(), "running", EventEnum.CARD.name());
+        DataCenterTask dataCenterTask = new DataCenterTask(
+                new DataCenterTaskIdentity(cardListCreateCommand.getDataCenter().name(), EventEnum.CARD.name()),
+                cardListCreateCommand.getChannelId()
         );
 
-        if (metaDataList.size() == 0) {
-            return;
+        taskRepository.store(dataCenterTask);
+        dataCenterTask.runCardTask();
+    }
+
+    /**
+     * 创建收录目录
+     */
+    public void createIncludeInfo(IncludeInfoCreateCommand includeInfoCreateCommand) {
+        isRunning(includeInfoCreateCommand.getDataCenter(), "running", EventEnum.INCLUDE.name());
+        DataCenterTask dataCenterTask = new DataCenterTask(
+                new DataCenterTaskIdentity(includeInfoCreateCommand.getDataCenter().name(), EventEnum.INCLUDE.name()),
+                includeInfoCreateCommand.getChannelId()
+        );
+
+        if (!"".equals(includeInfoCreateCommand.getChannelId())) {
+            taskRepository.store(dataCenterTask);
         }
 
-        metaDataList.forEach(metaData -> metaData.createMetaData(includeInfoCreateCommand.getChannelId()));
+        dataCenterTask.runIncludeTask(includeInfoCreateCommand.getCardPassword(), includeInfoCreateCommand.getResource());
+    }
+
+    private void isRunning(DataCenterEnum dataCenter, String running, String type) {
+        DataCenterTask dataCenterTask = taskRepository.findByDataCenterAndStatus(dataCenter, running, type);
+        if (dataCenterTask != null) {
+            throw new DataCenterTaskRunningException(String.format("%s-%s任务运行中", dataCenter, type));
+        }
     }
 }

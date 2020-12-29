@@ -14,8 +14,6 @@ public class MetaDataCreated<T> implements DomainEvent {
 
     private T data;
 
-    private String operateChannelId;
-
     @Override
     public long occurredOn() {
         return System.currentTimeMillis();

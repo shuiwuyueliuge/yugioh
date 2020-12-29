@@ -5,12 +5,12 @@ import cn.mayu.yugioh.common.basic.tool.JsonConstructor;
 import cn.mayu.yugioh.common.basic.tool.JsonParser;
 import cn.mayu.yugioh.pegasus.application.DataCenterCommandService;
 import cn.mayu.yugioh.pegasus.application.command.IncludeInfoCreateCommand;
-import cn.mayu.yugioh.pegasus.application.datacenter.DataCenterEnum;
-import cn.mayu.yugioh.pegasus.application.datacenter.IncludeData;
+import cn.mayu.yugioh.pegasus.infrastructure.datacenter.DataCenterEnum;
+import cn.mayu.yugioh.pegasus.infrastructure.datacenter.IncludeData;
 import cn.mayu.yugioh.pegasus.application.dto.CardDTO;
 import cn.mayu.yugioh.pegasus.application.dto.IncludeDTO;
 import cn.mayu.yugioh.pegasus.domain.aggregate.MetaData;
-import cn.mayu.yugioh.pegasus.application.datacenter.CardData;
+import cn.mayu.yugioh.pegasus.infrastructure.datacenter.CardData;
 import cn.mayu.yugioh.common.basic.html.HtmlHandler;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
@@ -38,7 +38,7 @@ public class OurocgDataFinder implements CardData, IncludeData, Iterator<List<Me
     public OurocgDataFinder(HtmlHandler<List<Map<String, String>>> cardInfoHtmlHandler,
                             HtmlHandler<Map<String, Object>> includeHtmlHandler,
                             DataCenterCommandService dataCenterCommandService) {
-        this.start = 1;
+        this.start = 1105;
         this.next = true;
         this.cardUrl = "https://www.ourocg.cn/card/list-5/";
         this.cardInfoHtmlHandler = cardInfoHtmlHandler;
@@ -74,6 +74,11 @@ public class OurocgDataFinder implements CardData, IncludeData, Iterator<List<Me
                                         JsonConstructor.defaultInstance().writeValueAsString(data)
                                 ));
             }).collect(Collectors.toList());
+            if (result.size() < 10) {
+                this.next = false;
+                return result;
+            }
+
             this.start = start + 1;
             return result;
         } catch (Exception e) {

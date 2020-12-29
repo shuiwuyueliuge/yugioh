@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@Document(indexName = "ygocard", type = "_doc", shards= 1, replicas = 0)
+@Document(indexName = "ygocard", shards= 1, replicas = 0)
 public class CardDO {
 
     @Id
