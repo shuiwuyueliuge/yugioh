@@ -25,13 +25,25 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public void store(DataCenterTask dataCenterTask) {
-        jpaTaskRepository.save(new DataCenterTaskDO(
+        DataCenterTaskDO dataCenterTaskDO = new DataCenterTaskDO(
                 dataCenterTask.getDataCenterTaskIdentity().getDataCenter(),
                 dataCenterTask.getDataCenterTaskIdentity().getStartTime(),
                 dataCenterTask.getDataCenterTaskIdentity().getType(),
                 dataCenterTask.getStatus(),
                 dataCenterTask.getOperateChannel(),
                 dataCenterTask.getEndTime()
-        ));
+        );
+
+        DataCenterTaskDO saved = jpaTaskRepository.findByDataCenterAndStatusAndType(
+                dataCenterTask.getDataCenterTaskIdentity().getDataCenter(),
+                "running",
+                dataCenterTask.getDataCenterTaskIdentity().getType()
+        );
+
+        if (saved != null) {
+            dataCenterTaskDO.setId(saved.getId());
+        }
+
+        jpaTaskRepository.save(dataCenterTaskDO);
     }
 }

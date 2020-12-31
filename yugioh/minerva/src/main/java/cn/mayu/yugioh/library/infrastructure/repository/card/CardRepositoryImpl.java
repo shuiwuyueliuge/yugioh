@@ -14,11 +14,11 @@ public class CardRepositoryImpl implements CardRepository {
 
     @Override
     public synchronized void store(Card card) {
-        //CardDO saved = jpaCardRepository.findByPassword(card.getCardIdentity().getPassword());
+        CardDO saved = jpaCardRepository.findByPassword(card.getCardIdentity().getPassword());
         CardDO cardDO = new CardDO();
-//        if (saved != null) {
-//            cardDO.setId(saved.getId());
-//        }
+        if (saved != null) {
+            cardDO.setId(saved.getId());
+        }
 
         cardDO.setPassword(card.getCardIdentity().getPassword());
         cardDO.setName(card.getName().getName());

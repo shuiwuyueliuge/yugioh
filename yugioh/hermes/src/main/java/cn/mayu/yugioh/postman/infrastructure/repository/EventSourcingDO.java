@@ -35,16 +35,12 @@ public class EventSourcingDO {
     @Column(name = "routing_key")
     private String routingKey;
 
-    @Column(name = "channel")
-    private String channel;
-
-    public EventSourcingDO(Long eventId, Long occurredOn, String type, String payload, Integer status, String routingKey, String channel) {
+    public EventSourcingDO(Long eventId, Long occurredOn, String type, String payload, Integer status, String routingKey) {
         this.eventId = eventId;
         this.occurredOn = occurredOn;
         this.type = type;
         this.payload = payload;
         this.status = status;
         this.routingKey = routingKey;
-        this.channel = channel;
     }
 }

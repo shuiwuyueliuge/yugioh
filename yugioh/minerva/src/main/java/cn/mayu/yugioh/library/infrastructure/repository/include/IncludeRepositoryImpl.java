@@ -22,15 +22,15 @@ public class IncludeRepositoryImpl implements IncludeRepository {
                 include.getCardIdentity().getPassword()
         );
 
-//        IncludeDO saved = jpaIncludeRepository.findByPackageNameAndPasswordAndRare(
-//                include.getPackageIdentity().getPackageName(),
-//                include.getCardIdentity().getPassword(),
-//                include.getRare()
-//        );
-//
-//        if (saved != null) {
-//            includeDO.setId(saved.getId());
-//        }
+        IncludeDO saved = jpaIncludeRepository.findByPackageNameAndPasswordAndRare(
+                include.getPackageIdentity().getPackageName(),
+                include.getCardIdentity().getPassword(),
+                include.getRare()
+        );
+
+        if (saved != null) {
+            includeDO.setId(saved.getId());
+        }
 
         jpaIncludeRepository.save(includeDO);
     }

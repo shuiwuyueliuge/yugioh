@@ -25,8 +25,6 @@ public class EventSourcing extends Entity {
 
     private Integer status;
 
-    private String channel;
-
     public EventSourcing(DomainEvent domainEvent) {
         RemoteDomainEvent remoteDomainEvent = (RemoteDomainEvent) domainEvent;
         this.eventId = SnowFlake.nextId();

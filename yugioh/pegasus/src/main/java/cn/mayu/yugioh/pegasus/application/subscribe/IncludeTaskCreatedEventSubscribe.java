@@ -9,12 +9,11 @@ import cn.mayu.yugioh.pegasus.application.dto.IncludeDTO;
 import cn.mayu.yugioh.pegasus.domain.aggregate.TaskRepository;
 import cn.mayu.yugioh.pegasus.domain.aggregate.DataCenterTask;
 import cn.mayu.yugioh.pegasus.domain.aggregate.IncludeCenterTaskCreated;
-import cn.mayu.yugioh.pegasus.domain.aggregate.MetaData;
 import cn.mayu.yugioh.pegasus.infrastructure.datacenter.DataCenterFactory;
 import cn.mayu.yugioh.pegasus.infrastructure.datacenter.DataCenterStrategy;
+import cn.mayu.yugioh.pegasus.infrastructure.datacenter.EventEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @Component
@@ -51,7 +50,7 @@ public class IncludeTaskCreatedEventSubscribe implements DomainEventSubscribe<In
         );
 
         // 获取收录信息
-        List<MetaData<IncludeDTO>> metaDataList = dataCenter.getIncludeData().obtainIncludes(
+        List<IncludeDTO> metaDataList = dataCenter.getIncludeData().obtainIncludes(
                 includeCenterTaskCreated.getCardPassword(),
                 includeCenterTaskCreated.getResource()
         );
@@ -74,7 +73,17 @@ public class IncludeTaskCreatedEventSubscribe implements DomainEventSubscribe<In
             eventFacade.receiveEvent(new EventReceiveCommand(runDomainEvent));
         }
 
-        metaDataList.forEach(metaData -> metaData.createMetaData());
+        metaDataList.forEach(metaData -> {
+            RemoteDomainEvent remoteDomainEvent = new RemoteDomainEvent(
+                    includeCenterTaskCreated.getDataCenterTaskIdentity().getStartTime(),
+                    EventEnum.INCLUDE.getType(),
+                    JsonConstructor.defaultInstance().writeValueAsString(metaData),
+                    includeCenterTaskCreated.getCardPassword()
+            );
+
+            eventFacade.receiveEvent(new EventReceiveCommand(remoteDomainEvent));
+        });
+
         if (!"".equals(includeCenterTaskCreated.getOperateChannel())) {
             // 任务结束保存任务状态
             DataCenterTask dataCenterTask = new DataCenterTask(

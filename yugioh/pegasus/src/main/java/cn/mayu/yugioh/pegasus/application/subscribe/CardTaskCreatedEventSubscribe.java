@@ -9,9 +9,9 @@ import cn.mayu.yugioh.pegasus.application.dto.CardDTO;
 import cn.mayu.yugioh.pegasus.domain.aggregate.TaskRepository;
 import cn.mayu.yugioh.pegasus.domain.aggregate.CardCenterTaskCreated;
 import cn.mayu.yugioh.pegasus.domain.aggregate.DataCenterTask;
-import cn.mayu.yugioh.pegasus.domain.aggregate.MetaData;
 import cn.mayu.yugioh.pegasus.infrastructure.datacenter.DataCenterFactory;
 import cn.mayu.yugioh.pegasus.infrastructure.datacenter.DataCenterStrategy;
+import cn.mayu.yugioh.pegasus.infrastructure.datacenter.EventEnum;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,15 +50,15 @@ public class CardTaskCreatedEventSubscribe implements DomainEventSubscribe<CardC
         // 获取数据中心
         DataCenterFactory dataCenter = dataCenterStrategy.findDataCenter(dataCenterTaskCreated.getDataCenterTaskIdentity().getDataCenter());
         // 获取卡片信息
-        Iterator<List<MetaData<CardDTO>>> cardIterator = dataCenter.getCardData().obtainCards();
+        Iterator<List<CardDTO>> cardIterator = dataCenter.getCardData().obtainCards();
         while (cardIterator.hasNext()) {
-            List<MetaData<CardDTO>> metaData = cardIterator.next();
+            List<CardDTO> metaData = cardIterator.next();
             // 发布执行日志
             List<Map<String, String>> mapList = Lists.newArrayList();
             metaData.forEach(data -> {
                 Map<String, String> map = Maps.newHashMap();
-                map.put("name", data.getData().getNameNw());
-                map.put("type", data.getData().getTypeVal());
+                map.put("name", data.getNameNw());
+                map.put("type", data.getTypeVal());
                 mapList.add(map);
             });
 
@@ -73,9 +73,15 @@ public class CardTaskCreatedEventSubscribe implements DomainEventSubscribe<CardC
 
             eventFacade.receiveEvent(new EventReceiveCommand(runDomainEvent));
 
-            for (MetaData data : metaData) {
-                // 发布创建卡片事件
-                data.createMetaData();
+            for (CardDTO data : metaData) {
+                RemoteDomainEvent remoteDomainEvent = new RemoteDomainEvent(
+                        dataCenterTaskCreated.getDataCenterTaskIdentity().getStartTime(),
+                        EventEnum.CARD.getType(),
+                        JsonConstructor.defaultInstance().writeValueAsString(data),
+                        data.getPassword()
+                );
+
+                eventFacade.receiveEvent(new EventReceiveCommand(remoteDomainEvent));
             }
         }
 

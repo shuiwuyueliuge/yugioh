@@ -9,7 +9,6 @@ import cn.mayu.yugioh.pegasus.infrastructure.datacenter.DataCenterEnum;
 import cn.mayu.yugioh.pegasus.infrastructure.datacenter.IncludeData;
 import cn.mayu.yugioh.pegasus.application.dto.CardDTO;
 import cn.mayu.yugioh.pegasus.application.dto.IncludeDTO;
-import cn.mayu.yugioh.pegasus.domain.aggregate.MetaData;
 import cn.mayu.yugioh.pegasus.infrastructure.datacenter.CardData;
 import cn.mayu.yugioh.common.basic.html.HtmlHandler;
 import com.google.common.collect.Lists;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class OurocgDataFinder implements CardData, IncludeData, Iterator<List<MetaData<CardDTO>>> {
+public class OurocgDataFinder implements CardData, IncludeData, Iterator<List<CardDTO>> {
 
     private final HtmlHandler<List<Map<String, String>>> cardInfoHtmlHandler;
 
@@ -47,7 +46,7 @@ public class OurocgDataFinder implements CardData, IncludeData, Iterator<List<Me
     }
 
     @Override
-    public Iterator<List<MetaData<CardDTO>>> obtainCards() {
+    public Iterator<List<CardDTO>> obtainCards() {
         return this;
     }
 
@@ -57,22 +56,19 @@ public class OurocgDataFinder implements CardData, IncludeData, Iterator<List<Me
     }
 
     @Override
-    public List<MetaData<CardDTO>> next() {
+    public List<CardDTO> next() {
         try {
             List<Map<String, String>> infos = cardInfoHtmlHandler.handle(this.cardUrl + start);
             infos.stream().forEach(data ->
                     dataCenterCommandService.createIncludeInfo(
                             new IncludeInfoCreateCommand(DataCenterEnum.OUROCG, "", data.get("password"), data.get("href"))));
-            List<MetaData<CardDTO>> result = infos.stream().map(data -> {
+            List<CardDTO> result = infos.stream().map(data -> {
                 data.put("password", data.get("password").replace("null", ""));
                 if (StringUtils.isEmpty(data.get("password"))) {
                     data.put("password", HashGenerator.createHashStr(data.get("name")));
                 }
 
-                return OurocgMetaDataAdapter.changeCard2MetaData(data.get("password"),
-                                data2CardDTO(
-                                        JsonConstructor.defaultInstance().writeValueAsString(data)
-                                ));
+                return data2CardDTO(JsonConstructor.defaultInstance().writeValueAsString(data));
             }).collect(Collectors.toList());
             if (result.size() < 10) {
                 this.next = false;
@@ -162,14 +158,12 @@ public class OurocgDataFinder implements CardData, IncludeData, Iterator<List<Me
     }
 
     @Override
-    public List<MetaData<IncludeDTO>> obtainIncludes(String password, String source) {
+    public List<IncludeDTO> obtainIncludes(String password, String source) {
         Map<String, Object> map = includeHtmlHandler.handle(source);
         this.adjust = map.get("adjust") == null ? map.get("adjust").toString() : "";
         String jsonData = JsonConstructor.defaultInstance().writeValueAsString(map.get("includeInfos"));
         List<IncludeDTO> includes = data2IncludeDTO(jsonData);
-        return includes.stream().map(include ->
-            OurocgMetaDataAdapter.changeInclude2MetaData(password, include)
-        ).filter(metaData -> !"[]".equals(metaData.getData())).collect(Collectors.toList());
+        return includes.stream().filter(include -> !"[]".equals(include)).collect(Collectors.toList());
     }
 
     public List<IncludeDTO> data2IncludeDTO(String cardData) {

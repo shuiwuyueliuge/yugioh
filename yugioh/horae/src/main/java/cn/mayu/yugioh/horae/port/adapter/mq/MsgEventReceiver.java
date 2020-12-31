@@ -1,5 +1,7 @@
 package cn.mayu.yugioh.horae.port.adapter.mq;
 
+import cn.mayu.yugioh.common.basic.domain.RemoteDomainEvent;
+import cn.mayu.yugioh.common.basic.tool.JsonParser;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.Message;
@@ -8,6 +10,7 @@ import org.springframework.messaging.Message;
 public class MsgEventReceiver {
 	@StreamListener(MsgInputStream.MSG_INPUT)
 	public void receiveSave(Message<String> message) {
-		System.out.println(message.getPayload());
+		RemoteDomainEvent domainEvent = JsonParser.defaultInstance().readObjectValue(message.getPayload(), RemoteDomainEvent.class);
+		System.out.println(domainEvent.getPayload());
 	}
 }
