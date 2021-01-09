@@ -7,4 +7,6 @@ public interface TaskRepository {
     DataCenterTask findByDataCenterAndStatus(DataCenterEnum dataCenter, String running, String type);
 
     void store(DataCenterTask dataCenterTask);
+
+    DataCenterTask findByDataCenterAndStartTimeAndType(String dataCenter, long startTime, String type);
 }

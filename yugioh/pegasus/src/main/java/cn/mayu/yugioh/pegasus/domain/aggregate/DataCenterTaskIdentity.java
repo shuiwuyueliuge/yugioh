@@ -16,4 +16,9 @@ public class DataCenterTaskIdentity {
         this.type = type;
         this.startTime = System.currentTimeMillis();
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s_%s_%s", dataCenter, startTime, type);
+    }
 }

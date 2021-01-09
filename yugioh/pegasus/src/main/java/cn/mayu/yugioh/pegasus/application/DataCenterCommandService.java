@@ -24,10 +24,19 @@ public class DataCenterCommandService {
      * 创建card目录
      */
     public void createCardList(CardInfoCreateCommand cardListCreateCommand) {
-        isRunning(cardListCreateCommand.getDataCenter(), "running", EventEnum.CARD.name());
+        // 判断是不是子任务,通过主任务id找到主任务的channel。不是主任务只能运行一次,(子任务保存)
+        if (cardListCreateCommand.getParentTask() != null) {
+            String[] taskIdentity = cardListCreateCommand.getParentTask().split("_");
+            DataCenterTask savedTask = taskRepository.findByDataCenterAndStartTimeAndType(taskIdentity[0], Long.valueOf(taskIdentity[1]), taskIdentity[2]);
+            cardListCreateCommand.setChannelId(savedTask.getOperateChannel());
+        } else {
+            isRunning(cardListCreateCommand.getDataCenter(), "running", EventEnum.CARD.name());
+        }
+
         DataCenterTask dataCenterTask = new DataCenterTask(
                 new DataCenterTaskIdentity(cardListCreateCommand.getDataCenter().name(), EventEnum.CARD.name()),
-                cardListCreateCommand.getChannelId()
+                cardListCreateCommand.getChannelId(),
+                cardListCreateCommand.getParentTask()
         );
 
         taskRepository.store(dataCenterTask);
@@ -38,17 +47,25 @@ public class DataCenterCommandService {
      * 创建收录目录
      */
     public void createIncludeInfo(IncludeInfoCreateCommand includeInfoCreateCommand) {
-        isRunning(includeInfoCreateCommand.getDataCenter(), "running", EventEnum.INCLUDE.name());
-        DataCenterTask dataCenterTask = new DataCenterTask(
-                new DataCenterTaskIdentity(includeInfoCreateCommand.getDataCenter().name(), EventEnum.INCLUDE.name()),
-                includeInfoCreateCommand.getChannelId()
-        );
-
-        if (!"".equals(includeInfoCreateCommand.getChannelId())) {
-            taskRepository.store(dataCenterTask);
+        if (includeInfoCreateCommand.getParentTask() != null) {
+            String[] taskIdentity = includeInfoCreateCommand.getParentTask().split("_");
+            DataCenterTask savedTask = taskRepository.findByDataCenterAndStartTimeAndType(taskIdentity[0], Long.valueOf(taskIdentity[1]), taskIdentity[2]);
+            includeInfoCreateCommand.setChannelId(savedTask.getOperateChannel());
+        } else {
+            isRunning(includeInfoCreateCommand.getDataCenter(), "running", EventEnum.INCLUDE.name());
         }
 
-        dataCenterTask.runIncludeTask(includeInfoCreateCommand.getCardPassword(), includeInfoCreateCommand.getResource());
+        DataCenterTask dataCenterTask = new DataCenterTask(
+                new DataCenterTaskIdentity(includeInfoCreateCommand.getDataCenter().name(), EventEnum.INCLUDE.name()),
+                includeInfoCreateCommand.getChannelId(),
+                includeInfoCreateCommand.getParentTask()
+        );
+
+        taskRepository.store(dataCenterTask);
+        dataCenterTask.runIncludeTask(
+                includeInfoCreateCommand.getCardPassword(),
+                includeInfoCreateCommand.getResource()
+        );
     }
 
     private void isRunning(DataCenterEnum dataCenter, String running, String type) {

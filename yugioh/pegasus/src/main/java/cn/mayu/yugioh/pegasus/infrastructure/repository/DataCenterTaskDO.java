@@ -37,12 +37,18 @@ public class DataCenterTaskDO {
     @Column(name = "end_time")
     private long endTime;
 
-    public DataCenterTaskDO(String dataCenter, long startTime, String type, String status, String operateChannel, long endTime) {
+    @Column(name = "parent_task")
+    private String parentTask;
+
+    public DataCenterTaskDO(String dataCenter, long startTime, String type,
+                            String status, String operateChannel, long endTime,
+                            String parentTask) {
         this.dataCenter = dataCenter;
         this.startTime = startTime;
         this.type = type;
         this.status = status;
         this.operateChannel = operateChannel;
         this.endTime = endTime;
+        this.parentTask = parentTask;
     }
 }

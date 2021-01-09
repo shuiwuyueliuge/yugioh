@@ -20,7 +20,13 @@ public class TaskRepositoryImpl implements TaskRepository {
             return null;
         }
 
-        return new DataCenterTask(new DataCenterTaskIdentity(dataCenterTaskDO.getDataCenter(), dataCenterTaskDO.getType()), dataCenterTaskDO.getOperateChannel());
+        return new DataCenterTask(
+                new DataCenterTaskIdentity(
+                        dataCenterTaskDO.getDataCenter(),
+                        dataCenterTaskDO.getType()),
+                dataCenterTaskDO.getOperateChannel(),
+                dataCenterTaskDO.getParentTask()
+        );
     }
 
     @Override
@@ -31,7 +37,8 @@ public class TaskRepositoryImpl implements TaskRepository {
                 dataCenterTask.getDataCenterTaskIdentity().getType(),
                 dataCenterTask.getStatus(),
                 dataCenterTask.getOperateChannel(),
-                dataCenterTask.getEndTime()
+                dataCenterTask.getEndTime(),
+                dataCenterTask.getParentTask()
         );
 
         DataCenterTaskDO saved = jpaTaskRepository.findByDataCenterAndStatusAndType(
@@ -45,5 +52,17 @@ public class TaskRepositoryImpl implements TaskRepository {
         }
 
         jpaTaskRepository.save(dataCenterTaskDO);
+    }
+
+    @Override
+    public DataCenterTask findByDataCenterAndStartTimeAndType(String dataCenter, long startTime, String type) {
+        DataCenterTaskDO savedTask = jpaTaskRepository.findByDataCenterAndStartTimeAndType(dataCenter, startTime, type);
+        return new DataCenterTask(
+                new DataCenterTaskIdentity(
+                        savedTask.getDataCenter(),
+                        savedTask.getType()),
+                        savedTask.getOperateChannel(),
+                        savedTask.getParentTask()
+        );
     }
 }

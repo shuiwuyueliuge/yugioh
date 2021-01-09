@@ -16,6 +16,8 @@ public class IncludeCenterTaskCreated implements DomainEvent {
 
     private String resource;
 
+    private String parentTask;
+
     @Override
     public long occurredOn() {
         return dataCenterTaskIdentity.getStartTime();

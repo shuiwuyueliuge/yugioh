@@ -17,4 +17,6 @@ public class IncludeInfoCreateCommand {
     private String cardPassword;
 
     private String resource;
+
+    private String parentTask;
 }

@@ -34,10 +34,12 @@ public class OurocgDataFinder implements CardData, IncludeData, Iterator<List<Ca
 
     private String adjust;
 
+    private String taskIdentity;
+
     public OurocgDataFinder(HtmlHandler<List<Map<String, String>>> cardInfoHtmlHandler,
                             HtmlHandler<Map<String, Object>> includeHtmlHandler,
                             DataCenterCommandService dataCenterCommandService) {
-        this.start = 1105;
+        this.start = 1;
         this.next = true;
         this.cardUrl = "https://www.ourocg.cn/card/list-5/";
         this.cardInfoHtmlHandler = cardInfoHtmlHandler;
@@ -46,7 +48,8 @@ public class OurocgDataFinder implements CardData, IncludeData, Iterator<List<Ca
     }
 
     @Override
-    public Iterator<List<CardDTO>> obtainCards() {
+    public Iterator<List<CardDTO>> obtainCards(String taskIdentity) {
+        this.taskIdentity = taskIdentity;
         return this;
     }
 
@@ -61,7 +64,7 @@ public class OurocgDataFinder implements CardData, IncludeData, Iterator<List<Ca
             List<Map<String, String>> infos = cardInfoHtmlHandler.handle(this.cardUrl + start);
             infos.stream().forEach(data ->
                     dataCenterCommandService.createIncludeInfo(
-                            new IncludeInfoCreateCommand(DataCenterEnum.OUROCG, "", data.get("password"), data.get("href"))));
+                            new IncludeInfoCreateCommand(DataCenterEnum.OUROCG, "", data.get("password"), data.get("href"), taskIdentity)));
             List<CardDTO> result = infos.stream().map(data -> {
                 data.put("password", data.get("password").replace("null", ""));
                 if (StringUtils.isEmpty(data.get("password"))) {

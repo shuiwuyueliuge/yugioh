@@ -14,6 +14,7 @@ import cn.mayu.yugioh.pegasus.infrastructure.datacenter.DataCenterStrategy;
 import cn.mayu.yugioh.pegasus.infrastructure.datacenter.EventEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 @Component
@@ -30,21 +31,18 @@ public class IncludeTaskCreatedEventSubscribe implements DomainEventSubscribe<In
 
     @Override
     public void subscribe(IncludeCenterTaskCreated includeCenterTaskCreated) {
-        if (!"".equals(includeCenterTaskCreated.getOperateChannel())) {
-            // 发布任务开始日志
-            RemoteDomainEvent startDomainEvent = new RemoteDomainEvent(
-                    System.currentTimeMillis(),
-                    "task-msg",
-                    String.format("Start from the %s platform transfer %s data task",
-                            includeCenterTaskCreated.getDataCenterTaskIdentity().getDataCenter(),
-                            includeCenterTaskCreated.getDataCenterTaskIdentity().getType()
-                    ),
-                    includeCenterTaskCreated.getOperateChannel()
-            );
+        // 发布任务开始日志
+        RemoteDomainEvent startDomainEvent = new RemoteDomainEvent(
+                System.currentTimeMillis(),
+                "task-msg",
+                String.format("Start from the %s platform transfer %s data task",
+                        includeCenterTaskCreated.getDataCenterTaskIdentity().getDataCenter(),
+                        includeCenterTaskCreated.getDataCenterTaskIdentity().getType()
+                ),
+                includeCenterTaskCreated.getOperateChannel()
+        );
 
-            eventFacade.receiveEvent(new EventReceiveCommand(startDomainEvent));
-        }
-
+        eventFacade.receiveEvent(new EventReceiveCommand(startDomainEvent));
         DataCenterFactory dataCenter = dataCenterStrategy.findDataCenter(
                 includeCenterTaskCreated.getDataCenterTaskIdentity().getDataCenter()
         );
@@ -55,11 +53,7 @@ public class IncludeTaskCreatedEventSubscribe implements DomainEventSubscribe<In
                 includeCenterTaskCreated.getResource()
         );
 
-        if (metaDataList.size() == 0) {
-            return;
-        }
-
-        if (!"".equals(includeCenterTaskCreated.getOperateChannel())) {
+        if (metaDataList.size() != 0) {
             // 发布执行日志
             RemoteDomainEvent runDomainEvent = new RemoteDomainEvent(
                     System.currentTimeMillis(),
@@ -71,44 +65,40 @@ public class IncludeTaskCreatedEventSubscribe implements DomainEventSubscribe<In
             );
 
             eventFacade.receiveEvent(new EventReceiveCommand(runDomainEvent));
+            metaDataList.forEach(metaData -> {
+                RemoteDomainEvent remoteDomainEvent = new RemoteDomainEvent(
+                        includeCenterTaskCreated.getDataCenterTaskIdentity().getStartTime(),
+                        EventEnum.INCLUDE.getType(),
+                        JsonConstructor.defaultInstance().writeValueAsString(metaData),
+                        includeCenterTaskCreated.getCardPassword()
+                );
+
+                eventFacade.receiveEvent(new EventReceiveCommand(remoteDomainEvent));
+            });
         }
 
-        metaDataList.forEach(metaData -> {
-            RemoteDomainEvent remoteDomainEvent = new RemoteDomainEvent(
-                    includeCenterTaskCreated.getDataCenterTaskIdentity().getStartTime(),
-                    EventEnum.INCLUDE.getType(),
-                    JsonConstructor.defaultInstance().writeValueAsString(metaData),
-                    includeCenterTaskCreated.getCardPassword()
-            );
+        // 任务结束保存任务状态
+        DataCenterTask dataCenterTask = new DataCenterTask(
+                includeCenterTaskCreated.getDataCenterTaskIdentity(),
+                includeCenterTaskCreated.getOperateChannel(),
+                includeCenterTaskCreated.getParentTask()
+        );
 
-            eventFacade.receiveEvent(new EventReceiveCommand(remoteDomainEvent));
-        });
+        dataCenterTask.finish();
+        taskRepository.store(dataCenterTask);
 
-        if (!"".equals(includeCenterTaskCreated.getOperateChannel())) {
-            // 任务结束保存任务状态
-            DataCenterTask dataCenterTask = new DataCenterTask(
-                    includeCenterTaskCreated.getDataCenterTaskIdentity(),
-                    includeCenterTaskCreated.getOperateChannel()
-            );
+        // 发布执行日志
+        RemoteDomainEvent endDomainEvent = new RemoteDomainEvent(
+                System.currentTimeMillis(),
+                "task-msg",
+                String.format("end from the %s platform transfer %s data task",
+                        includeCenterTaskCreated.getDataCenterTaskIdentity().getDataCenter(),
+                        includeCenterTaskCreated.getDataCenterTaskIdentity().getType()
+                ),
+                includeCenterTaskCreated.getOperateChannel()
+        );
 
-            dataCenterTask.finish();
-            taskRepository.store(dataCenterTask);
-        }
-
-        if (!"".equals(includeCenterTaskCreated.getOperateChannel())) {
-            // 发布执行日志
-            RemoteDomainEvent endDomainEvent = new RemoteDomainEvent(
-                    System.currentTimeMillis(),
-                    "task-msg",
-                    String.format("end from the %s platform transfer %s data task",
-                            includeCenterTaskCreated.getDataCenterTaskIdentity().getDataCenter(),
-                            includeCenterTaskCreated.getDataCenterTaskIdentity().getType()
-                    ),
-                    includeCenterTaskCreated.getOperateChannel()
-            );
-
-            eventFacade.receiveEvent(new EventReceiveCommand(endDomainEvent));
-        }
+        eventFacade.receiveEvent(new EventReceiveCommand(endDomainEvent));
     }
 
     @Override

@@ -12,6 +12,8 @@ public class CardCenterTaskCreated implements DomainEvent {
 
     private String operateChannel;
 
+    private String parentTask;
+
     @Override
     public long occurredOn() {
         return dataCenterTaskIdentity.getStartTime();

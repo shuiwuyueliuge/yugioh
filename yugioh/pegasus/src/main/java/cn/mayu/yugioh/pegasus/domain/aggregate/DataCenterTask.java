@@ -18,10 +18,13 @@ public class DataCenterTask extends Entity {
 
     private long endTime;
 
-    public DataCenterTask(DataCenterTaskIdentity dataCenterTaskIdentity, String operateChannel) {
+    private String parentTask;
+
+    public DataCenterTask(DataCenterTaskIdentity dataCenterTaskIdentity, String operateChannel, String parentTask) {
         this.status = DataCenterTaskStatusEnum.RUNNING.name();
         this.dataCenterTaskIdentity = dataCenterTaskIdentity;
         this.operateChannel = operateChannel;
+        this.parentTask = parentTask;
     }
 
     public void finish() {
@@ -33,7 +36,8 @@ public class DataCenterTask extends Entity {
         DomainEventPublisher eventPublisher = BeanManager.getBean(DomainEventPublisher.class);
         eventPublisher.publishEvent(new CardCenterTaskCreated(
                 this.dataCenterTaskIdentity,
-                this.operateChannel
+                this.operateChannel,
+                this.parentTask
         ));
     }
 
@@ -43,7 +47,8 @@ public class DataCenterTask extends Entity {
                 this.dataCenterTaskIdentity,
                 this.operateChannel,
                 cardPassword,
-                resource
+                resource,
+                this.parentTask
         ));
     }
 }

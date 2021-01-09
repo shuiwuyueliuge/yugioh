@@ -50,7 +50,7 @@ public class CardTaskCreatedEventSubscribe implements DomainEventSubscribe<CardC
         // 获取数据中心
         DataCenterFactory dataCenter = dataCenterStrategy.findDataCenter(dataCenterTaskCreated.getDataCenterTaskIdentity().getDataCenter());
         // 获取卡片信息
-        Iterator<List<CardDTO>> cardIterator = dataCenter.getCardData().obtainCards();
+        Iterator<List<CardDTO>> cardIterator = dataCenter.getCardData().obtainCards(dataCenterTaskCreated.getDataCenterTaskIdentity().toString());
         while (cardIterator.hasNext()) {
             List<CardDTO> metaData = cardIterator.next();
             // 发布执行日志
@@ -88,7 +88,8 @@ public class CardTaskCreatedEventSubscribe implements DomainEventSubscribe<CardC
         // 任务结束保存任务状态
         DataCenterTask dataCenterTask = new DataCenterTask(
                 dataCenterTaskCreated.getDataCenterTaskIdentity(),
-                dataCenterTaskCreated.getOperateChannel()
+                dataCenterTaskCreated.getOperateChannel(),
+                dataCenterTaskCreated.getParentTask()
         );
 
         dataCenterTask.finish();
