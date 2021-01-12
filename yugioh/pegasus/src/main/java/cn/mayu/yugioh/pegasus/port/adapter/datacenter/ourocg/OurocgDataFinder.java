@@ -60,32 +60,25 @@ public class OurocgDataFinder implements CardData, IncludeData, Iterator<List<Ca
 
     @Override
     public List<CardDTO> next() {
-        try {
-            List<Map<String, String>> infos = cardInfoHtmlHandler.handle(this.cardUrl + start);
-            infos.stream().forEach(data ->
-                    dataCenterCommandService.createIncludeInfo(
-                            new IncludeInfoCreateCommand(DataCenterEnum.OUROCG, "", data.get("password"), data.get("href"), taskIdentity)));
-            List<CardDTO> result = infos.stream().map(data -> {
-                data.put("password", data.get("password").replace("null", ""));
-                if (StringUtils.isEmpty(data.get("password"))) {
-                    data.put("password", HashGenerator.createHashStr(data.get("name")));
-                }
-
-                return data2CardDTO(JsonConstructor.defaultInstance().writeValueAsString(data));
-            }).collect(Collectors.toList());
-            if (result.size() < 10) {
-                this.next = false;
-                return result;
+        List<Map<String, String>> infos = cardInfoHtmlHandler.handle(this.cardUrl + start);
+        infos.stream().forEach(data ->
+                dataCenterCommandService.createIncludeInfo(
+                        new IncludeInfoCreateCommand(DataCenterEnum.OUROCG, "", data.get("password"), data.get("href"), taskIdentity)));
+        List<CardDTO> result = infos.stream().map(data -> {
+            data.put("password", data.get("password").replace("null", ""));
+            if (StringUtils.isEmpty(data.get("password"))) {
+                data.put("password", HashGenerator.createHashStr(data.get("name")));
             }
 
-            this.start = start + 1;
+            return data2CardDTO(JsonConstructor.defaultInstance().writeValueAsString(data));
+        }).collect(Collectors.toList());
+        if (result.size() < 10) {
+            this.next = false;
             return result;
-        } catch (Exception e) {
-            e.printStackTrace();
-            //throw e;
-            this.start = start + 1;
-            return Lists.newArrayList();
         }
+
+        this.start = start + 1;
+        return result;
     }
 
     public CardDTO data2CardDTO(String cardData) {

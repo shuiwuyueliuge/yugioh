@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+cn.mayu.yugioh.common.web.result.ResultInterceptor,\
+cn.mayu.yugioh.common.web.result.ResponseWrapper

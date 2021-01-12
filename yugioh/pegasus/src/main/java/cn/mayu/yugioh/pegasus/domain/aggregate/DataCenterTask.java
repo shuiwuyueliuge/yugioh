@@ -29,7 +29,7 @@ public class DataCenterTask extends Entity {
 
     public void finish() {
         this.endTime = System.currentTimeMillis();
-        this.status = "end";
+        this.status = DataCenterTaskStatusEnum.END.name();
     }
 
     public void runCardTask() {
@@ -46,9 +46,9 @@ public class DataCenterTask extends Entity {
         eventPublisher.publishEvent(new IncludeCenterTaskCreated(
                 this.dataCenterTaskIdentity,
                 this.operateChannel,
+                this.parentTask,
                 cardPassword,
-                resource,
-                this.parentTask
+                resource
         ));
     }
 }

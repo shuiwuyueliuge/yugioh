@@ -1,25 +1,23 @@
 package cn.mayu.yugioh.pegasus.domain.aggregate;
 
-import cn.mayu.yugioh.common.basic.domain.DomainEvent;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
-@AllArgsConstructor
-public class IncludeCenterTaskCreated implements DomainEvent {
-
-    private DataCenterTaskIdentity dataCenterTaskIdentity;
-
-    private String operateChannel;
+@Getter
+public class IncludeCenterTaskCreated extends AbstractTask {
 
     private String cardPassword;
 
     private String resource;
 
-    private String parentTask;
+    public IncludeCenterTaskCreated(DataCenterTaskIdentity dataCenterTaskIdentity,
+                                    String operateChannel, String parentTask, String cardPassword, String resource) {
+        super(dataCenterTaskIdentity, operateChannel, parentTask);
+        this.cardPassword = cardPassword;
+        this.resource = resource;
+    }
 
     @Override
     public long occurredOn() {
-        return dataCenterTaskIdentity.getStartTime();
+        return getDataCenterTaskIdentity().getStartTime();
     }
 }

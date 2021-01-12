@@ -2,6 +2,8 @@ package cn.mayu.yugioh.horae.port.adapter.mq;
 
 import cn.mayu.yugioh.common.basic.domain.RemoteDomainEvent;
 import cn.mayu.yugioh.common.basic.tool.JsonParser;
+import cn.mayu.yugioh.horae.infrastructure.server.ChannelSupervise;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.Message;
@@ -12,5 +14,6 @@ public class MsgEventReceiver {
 	public void receiveSave(Message<String> message) {
 		RemoteDomainEvent domainEvent = JsonParser.defaultInstance().readObjectValue(message.getPayload(), RemoteDomainEvent.class);
 		System.out.println(domainEvent.getPayload());
+		ChannelSupervise.send2All(new TextWebSocketFrame(domainEvent.getPayload()));
 	}
 }
