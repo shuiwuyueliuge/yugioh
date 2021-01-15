@@ -31,7 +31,7 @@ public abstract class TaskMessage<T, D extends AbstractTask> implements DomainEv
     }
 
     @Override
-    public void subscribe(D mainEvent) {
+    public final void subscribe(D mainEvent) {
         // 发布任务开始日志
         RemoteDomainEvent startDomainEvent = new RemoteDomainEvent(
                 System.currentTimeMillis(),
