@@ -14,15 +14,4 @@ public class PegasusApp {
         app.setBannerMode(Banner.Mode.OFF);
         app.run(args);
     }
-
-//    @Autowired
-//    ServerCodecConfigurer        serverCodecConfigurer;
-//    @Autowired
-//    RequestedContentTypeResolver requestedContentTypeResolver;
-//
-//    @Bean
-//    ResponseWrapper responseWrapper() {
-//        return new ResponseWrapper(serverCodecConfigurer
-//                .getWriters(), requestedContentTypeResolver);
-//    }
 }

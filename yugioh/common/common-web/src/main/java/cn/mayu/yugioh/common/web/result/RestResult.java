@@ -3,7 +3,6 @@ package cn.mayu.yugioh.common.web.result;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
-import org.slf4j.MDC;
 
 @Data
 public class RestResult {
@@ -14,24 +13,24 @@ public class RestResult {
 
     private String msg;
 
-    private String traceId;
-
-    public RestResult(int code, Object data) {
-        this(code, data, "");
+    protected RestResult(int code, Object data) {
+        this(code, data, null);
     }
 
-    public RestResult(int code, String msg) {
+    protected RestResult(int code, String msg) {
         this(code, null, msg);
     }
 
-    public RestResult(int code, Object data, String msg) {
+    protected RestResult(int code, Object data, String msg) {
         this.code = code;
         this.data = data;
         this.msg = msg;
-        this.traceId = MDC.get("traceId");
     }
 
-    public RestResult(Object o) {
+    protected static Object thisOrString(Class<?> genericTypeClass, int successCode, Object responseValue) {
+        return String.class == genericTypeClass ?
+                new RestResult(successCode, responseValue).toString() :
+                new RestResult(successCode, responseValue);
     }
 
     @Override

@@ -11,14 +11,8 @@ public class PageRestResult extends RestResult {
 
     private Long total;
 
-    private Integer pageNum;
-
-    private Integer pageSize;
-
-    public PageRestResult(int code, Object data, Long total, Integer pageNum, Integer pageSize) {
-        super(code, data);
-        this.total = total;
-        this.pageNum = pageNum;
-        this.pageSize = pageSize;
+    protected PageRestResult(int code, Pageable<?> pageableValue) {
+        super(code, pageableValue.getData());
+        this.total = pageableValue.getTotal();
     }
 }

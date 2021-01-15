@@ -17,6 +17,10 @@ public class BaseException extends RuntimeException {
         this(code, restMsg, null);
     }
 
+    public BaseException(Exception sourceException) {
+        this(0, null, sourceException);
+    }
+
     public BaseException(int code, String restMsg, Exception sourceException) {
         super(sourceException.getMessage());
         this.code = code;

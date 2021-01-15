@@ -3,8 +3,7 @@ package cn.mayu.yugioh.common.web.result;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
 
 @Data
 @AllArgsConstructor
@@ -13,9 +12,5 @@ public class Pageable<T> {
 
     private Long total;
 
-    private List<T> data;
-
-    private Integer pageNum;
-
-    private Integer pageSize;
+    private Flux<T> data;
 }
