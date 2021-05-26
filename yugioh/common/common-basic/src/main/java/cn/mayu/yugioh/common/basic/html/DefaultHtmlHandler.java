@@ -1,8 +1,5 @@
 package cn.mayu.yugioh.common.basic.html;
 
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
-
 /**
  * HtmlHandler的模板类
  * 对url访问并返回指定的对象，
@@ -11,17 +8,9 @@ import com.sun.org.slf4j.internal.LoggerFactory;
  */
 public abstract class DefaultHtmlHandler<T> implements HtmlHandler<T> {
 
-	private Logger log = LoggerFactory.getLogger(this.getClass());
-
 	@Override
 	public T handle(String url) throws HtmlHandlerException {
 		HtmlParser parser = new HtmlParser(url);
-		VisitResponse response = parser.getResponse();
-		if (log.isDebugEnabled()) {
-			log.debug("connect [{}] status code is [{}] and response-header is [{}]",
-					url, response.getStatusCode(), response.getHeaders());
-		}
-
 		HttpStatusCodeInterceptorChain interceptorChain = new HttpStatusCodeInterceptorChain();
 		addHttpStatusCodeInterceptor(interceptorChain);
 		interceptorChain.handleStatusCode(url, parser);

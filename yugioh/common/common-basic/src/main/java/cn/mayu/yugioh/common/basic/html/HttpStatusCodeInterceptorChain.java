@@ -11,8 +11,10 @@ public class HttpStatusCodeInterceptorChain {
 		chain = Lists.newArrayList();
 	}
 
-	protected void handleStatusCode(String url, HtmlParser htmlParser) {
-		chain.stream().forEach(interceptor -> interceptor.handleStatusCode(url, htmlParser));
+	protected void handleStatusCode(String url, HtmlParser htmlParser) throws HtmlHandlerException {
+		for (HttpStatusCodeInterceptor interceptor : chain) {
+			interceptor.handleStatusCode(url, htmlParser);
+		}
 	}
 	
 	public HttpStatusCodeInterceptorChain addInterceptor(HttpStatusCodeInterceptor interceptor) {

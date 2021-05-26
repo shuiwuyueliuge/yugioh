@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  cn.mayu.yugioh.common.web.result.DefaultRestCodeGenerator,\
-cn.mayu.yugioh.common.web.result.ResponseWrapper,\
+cn.mayu.yugioh.common.web.result.DefaultRestCodeGenerator,\
+cn.mayu.yugioh.common.web.result.RestWrapper,\
 cn.mayu.yugioh.common.web.result.WebExceptionWrapper

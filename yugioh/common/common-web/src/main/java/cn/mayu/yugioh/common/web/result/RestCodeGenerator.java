@@ -2,9 +2,19 @@ package cn.mayu.yugioh.common.web.result;
 
 public interface RestCodeGenerator {
 
-    int successCode();
+    default int restSuccessCode() {
+        return 200;
+    }
 
-    int exceptionCode();
+    default String restSuccessMsg() {
+        return "SUCCESS";
+    }
 
-    String exceptionMsg();
+    default int restSystemErrorCode() {
+        return 500;
+    }
+
+    default String restSystemErrorMsg() {
+        return "SYSTEM_ERROR";
+    }
 }

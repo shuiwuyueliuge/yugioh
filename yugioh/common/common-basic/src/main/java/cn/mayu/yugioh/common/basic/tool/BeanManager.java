@@ -19,7 +19,15 @@ public class BeanManager implements ApplicationContextAware {
         }
     }
 
-    public static <T> T getBean(Class<T> clazz) {
-        return applicationContext.getBean(clazz);
+    public static <T> T getBean(Class<T> classType) {
+        return applicationContext.getBean(classType);
+    }
+
+    public static <T> T getBean(String beanName, Class<T> classType) throws BeansException {
+        return applicationContext.getBean(beanName, classType);
+    }
+
+    public static Object getBean(String beanName) {
+        return applicationContext.getBean(beanName);
     }
 }

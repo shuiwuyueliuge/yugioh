@@ -1,13 +1,13 @@
 package cn.mayu.yugioh.common.basic.html;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+/**
+ * @description: html拦截错误
+ * @author: YgoPlayer
+ * @time: 2021/5/17 9:50 上午
+ */
+public class HtmlHandlerException extends Exception {
 
-@Data
-@AllArgsConstructor
-public class HtmlHandlerException extends RuntimeException {
-
-    private int statusCode;
-
-    private String url;
+    public HtmlHandlerException(String url, int statusCode) {
+        super(String.format("connect %s status %s", url, statusCode));
+    }
 }

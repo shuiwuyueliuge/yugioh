@@ -15,6 +15,7 @@
         <module>common-basic</module>
         <module>common-facade</module>
         <module>common-web</module>
+        <module>common-redis</module>
     </modules>
 
     <dependencies>

@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>hermes-facade</module>
+        <module>minerva-facade</module>
     </modules>
     <artifactId>common-facade</artifactId>
 

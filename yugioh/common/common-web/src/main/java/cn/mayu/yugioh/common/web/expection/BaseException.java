@@ -22,7 +22,7 @@ public class BaseException extends RuntimeException {
     }
 
     public BaseException(int code, String restMsg, Exception sourceException) {
-        super(sourceException.getMessage());
+        super(restMsg);
         this.code = code;
         this.sourceException = sourceException;
         this.restMsg = restMsg;

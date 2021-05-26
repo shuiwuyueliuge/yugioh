@@ -11,13 +11,13 @@
     <name>yugioh</name>
 
     <modules>
-        <module>pegasus</module>
+        <module>ceres</module> <!-- sync card data -->
         <module>common</module>
-        <module>hermes</module>
-        <module>register-center</module>
-        <module>minerva</module>
-        <module>aetos-kaukasios</module>
-        <module>horae</module>
+        <module>hermes</module> <!-- event sourcing -->
+        <module>olympos</module>
+        <module>minerva</module> <!-- save card data -->
+        <module>aetos-kaukasios</module> <!-- search card data -->
+        <module>prometheus</module> <!-- websocket -->
     </modules>
 
     <properties>
@@ -62,6 +62,11 @@
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.esotericsoftware</groupId>
+                <artifactId>reflectasm</artifactId>
+                <version>1.11.9</version>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>

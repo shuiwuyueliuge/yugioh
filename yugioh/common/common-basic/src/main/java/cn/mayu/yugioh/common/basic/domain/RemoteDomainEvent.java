@@ -1,9 +1,10 @@
 package cn.mayu.yugioh.common.basic.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@ToString
+@AllArgsConstructor
 @NoArgsConstructor
 public class RemoteDomainEvent implements DomainEvent {
 
@@ -15,11 +16,10 @@ public class RemoteDomainEvent implements DomainEvent {
 
     private String routingKey;
 
-    public RemoteDomainEvent(long occurredOn, String type, String payload, String routingKey) {
-        this.occurredOn = occurredOn;
+    public RemoteDomainEvent(long occurredOn, String type, String payload) {
         this.type = type;
         this.payload = payload;
-        this.routingKey = routingKey;
+        this.occurredOn = occurredOn;
     }
 
     @Override

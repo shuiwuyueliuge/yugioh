@@ -11,7 +11,7 @@ public class HashGenerator {
             digest.update(content.getBytes());
             return byteArray2HexString(digest.digest());
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("create " + content + " Hash error " + e.getMessage());
         }
     }
 

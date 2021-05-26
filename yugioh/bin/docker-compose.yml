@@ -1,0 +1,41 @@
+version: "3"
+services:
+  redis:
+    container_name: redis
+#    privileged: true
+#    restart: always
+    image: redis
+    network_mode: firstnetwork
+    ports:
+      - 6379:6379
+    volumes:
+      - /Users/a../Documents/docker/redis/conf/redis.conf:/etc/redis/redis.conf
+      - /Users/a../Documents/docker/redis/data:/data
+    command:
+      redis-server /etc/redis/redis.conf --appendonly yes
+  rabbitmq:
+    container_name: rabbitmq
+    hostname: my-rabbit
+#    restart: always
+    network_mode: firstnetwork
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+      - 61613:61613
+      - 15674:15674
+  mysql:
+    container_name: mysql
+#    privileged: true
+#    restart: always
+    network_mode: firstnetwork
+    image: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - /Users/a../Documents/docker/mysql/conf:/etc/mysql/conf.d
+      - /Users/a../Documents/docker/mysql/logs:/logs
+      - /Users/a../Documents/docker/mysql/data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - TZ=Asia/Shanghai

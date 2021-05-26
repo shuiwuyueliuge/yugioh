@@ -5,18 +5,19 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 @ConditionalOnMissingBean(RestCodeGenerator.class)
 public class DefaultRestCodeGenerator implements RestCodeGenerator {
 
-    @Override
-    public int successCode() {
-        return 10000;
+    public int restSuccessCode() {
+        return 200;
     }
 
-    @Override
-    public int exceptionCode() {
-        return 10001;
+    public String restSuccessMsg() {
+        return "SUCCESS";
     }
 
-    @Override
-    public String exceptionMsg() {
-        return "system error";
+    public int restSystemErrorCode() {
+        return 500;
+    }
+
+    public String restSystemErrorMsg() {
+        return "SYSTEM_ERROR";
     }
 }

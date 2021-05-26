@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class JsonParser {
 
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     private String json;
 
