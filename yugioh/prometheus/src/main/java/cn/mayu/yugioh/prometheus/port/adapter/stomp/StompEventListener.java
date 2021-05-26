@@ -48,12 +48,13 @@ public class StompEventListener implements ApplicationListener<ApplicationEvent>
                     serverInfoProvider.getServerName(),
                     serverInfoProvider.getDestination()
             );
+
+            appContext.publishEvent(new BrokerLinkFinishedEvent(this));
             return;
         }
 
         if (applicationEvent instanceof BrokerSubFinishedEvent) {
             connector.ping();
-            appContext.publishEvent(new BrokerLinkFinishedEvent(this));
         }
     }
 

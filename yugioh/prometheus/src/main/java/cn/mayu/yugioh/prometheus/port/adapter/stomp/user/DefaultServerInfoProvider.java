@@ -2,6 +2,8 @@ package cn.mayu.yugioh.prometheus.port.adapter.stomp.user;
 
 import org.springframework.context.annotation.Configuration;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @description: 服务信息，stomp使用
@@ -16,8 +18,12 @@ public class DefaultServerInfoProvider implements ServerInfoProvider {
     private final String serverName;
 
     public DefaultServerInfoProvider() {
-        this.sessionId = UUID.randomUUID().toString();
-        this.serverName = UUID.randomUUID().toString();
+        this.sessionId = getUUID();
+        this.serverName = getUUID();
+    }
+
+    private String getUUID() {
+        return Stream.of(UUID.randomUUID().toString().split("-")).collect(Collectors.joining());
     }
 
     @Override

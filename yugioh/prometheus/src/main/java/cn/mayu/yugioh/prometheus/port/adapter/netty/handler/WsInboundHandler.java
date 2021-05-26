@@ -1,5 +1,7 @@
 package cn.mayu.yugioh.prometheus.port.adapter.netty.handler;
 
+import cn.mayu.yugioh.common.basic.tool.BeanManager;
+import cn.mayu.yugioh.prometheus.port.adapter.stomp.user.ServerInfoProvider;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.*;
@@ -46,7 +48,8 @@ public class WsInboundHandler extends SimpleChannelInboundHandler<WebSocketFrame
                 log.debug("send:{}", res);
             }
 
-            ctx.channel().writeAndFlush(new TextWebSocketFrame("dasdasdasdasdasdasdasdasdsadasdasdasdas"));
+            ServerInfoProvider infoProvider = BeanManager.getBean(ServerInfoProvider.class);
+            ctx.channel().writeAndFlush(new TextWebSocketFrame(infoProvider.getServerName() + "|" + ctx.channel().id().asShortText()));
         }
     }
 

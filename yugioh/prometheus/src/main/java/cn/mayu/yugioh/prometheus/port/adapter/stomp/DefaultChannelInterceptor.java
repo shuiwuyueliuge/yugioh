@@ -35,6 +35,7 @@ public class DefaultChannelInterceptor implements ChannelInterceptor {
         SimpMessageType type = (SimpMessageType) message.getHeaders().get("simpMessageType");
         if (Objects.equals(type, SimpMessageType.HEARTBEAT)) {
             appContext.publishEvent(new BrokerSubFinishedEvent(this));
+            return;
         }
 
         if (Objects.equals(command, StompCommand.CONNECTED)) {

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @author: YgoPlayer
  * @time: 2021/5/17 5:51 下午
  */
-@Component
+//@Component
 public class WebSocketPartitionExtractor implements PartitionKeyExtractorStrategy, PartitionSelectorStrategy {
 
     @Override
