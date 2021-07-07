@@ -12,6 +12,7 @@ import cn.mayu.yugioh.common.facade.minerva.model.CardInfo;
 import cn.mayu.yugioh.common.redis.lock.RedisDistributedLock;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -155,7 +156,7 @@ public class OurocgCardService {
             String infos = new CardInfoHtmlHandler().handle(cardList + page);
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+            mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
             ourocgMetaData = mapper.readValue(infos, OurocgMetaData.class);
         } catch (Exception e) {
             log.error("visitOurocgForCardList error: ", e);

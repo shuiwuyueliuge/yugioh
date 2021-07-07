@@ -1,0 +1,116 @@
+:doctype: book
+:idprefix:
+:idseparator: -
+:toc: left
+:toclevels: 4
+:tabsize: 4
+:numbered:
+:sectanchors:
+:sectnums:
+:icons: font
+:hide-uri-scheme:
+:docinfo: shared,private
+
+:sc-ext: java
+:project-full-name: Yugioh Common RPC
+:all: {asterisk}{asterisk}
+
+= Yugioh Common RPC
+:doctype: book
+:idprefix:
+:idseparator: -
+:toc-title: 目录
+:toc: left
+:toclevels: 4
+:tabsize: 4
+:numbered:
+:sectanchors:
+:sectnums:
+:icons: font
+:hide-uri-scheme:
+:docinfo: shared,private
+
+:sc-ext: java
+:project-full-name: Yugioh Common RPC
+:all: {asterisk}{asterisk}
+
+*1.0-SNAPSHOT*
+
+== 使用文档
+
+Common RPC 项目包含了 Spring Cloud Openfeign 和 Spring Cloud CircuitBreaker Resilience4j 的实现.
+其中 Spring Cloud Openfeign 的相关文档位于 https://docs.spring.io/spring-cloud-openfeign/docs/3.0.3/reference/html/[Spring Cloud OpenFeign].
+其中 Spring Cloud CircuitBreaker Resilience4j 的相关文档位于 https://docs.spring.io/spring-cloud-circuitbreaker/docs/2.0.2/reference/html/[Spring Cloud Circuit Breaker].
+
+=== 配置openfeign
+
+==== 添加依赖
+
+* `cn.mayu:common-rpc:{version}`
+
+==== 如何使用
+
+https://docs.spring.io/spring-cloud-openfeign/docs/3.0.3/reference/html/[Spring Cloud OpenFeign]
+
+==== 开启feign-httpclient
+
+* `feign.httpclient.enabled=true` - 默认的 openfeign 的 Client 使用的是 Client.Default ,没有实现rpc的通讯的长链接,所以加入 feign-httpclient 的实现.配置链接池 + keep-alive达到长链接的目的.
+
+==== fail-over配置
+
+默认没有重试,如果要支持 failover 需要以下配置
+
+* `feign.retry.max-attempts` - 发起当前请求的时间间隔,单位毫秒
+* `feign.retry.max-period` - 发起当前请求的最大时间间隔,单位毫秒
+* `feign.retry.max-period` - 重试次数是1,因为包括第一次,所以我们如果想要重试2次,就需要设置为3
+
+=== 配置Resilience4j
+
+openfeign 的容错策略需要 CircuitBreaker 的支持
+
+==== 开启CircuitBreaker
+
+默认是不开启CircuitBreaker
+
+* `feign.circuitbreaker.enabled=true`
+* `feign.circuitbreaker.group.enabled=true` - 组配置实现feign circuitbreaker 的自定义配置, groupName 是 @FeignClient 中的 name 或者 contextId
+
+例如
+
+====
+[source,property]
+----
+resilience4j.thread-pool-bulkhead.instances.event.max-thread-pool-size=1
+resilience4j.thread-pool-bulkhead.instances.event.core-thread-pool-size=1
+----
+====
+
+event 就是 自定义的 contextId
+
+==== 超时配置
+
+[TIP]
+====
+关于 resilience4j 的超时(默认1秒)配置应大于 feign 的超时配置.
+目前熔断器需要自定义配置(指定 group)是无法通过配置文件实现的,
+源码 TimeLimiter timeLimiter = timeLimiterRegistry.timeLimiter(id, timeLimiterConfig, tags);
+此id应该为groupName,所以只能通过id来配置超时时间
+====
+
+====
+[source,java]
+----
+@Bean
+public Customizer<Resilience4JCircuitBreakerFactory> slowCustomizer() {
+    return factory -> factory.configure(builder -> builder.circuitBreakerConfig(CircuitBreakerConfig.ofDefaults())
+            .timeLimiterConfig(TimeLimiterConfig.custom().timeoutDuration(Duration.ofSeconds(2)).build()), "EventFacade#receiveEvent(EventReceiveCommand)");
+}
+----
+====
+
+==== 集成sky-walking
+
+sky walking 的官方插件没有集成 CircuitBreaker, 目前只有 hystrix.所以需要自定义插件详见common-skywalking-plugin
+
+
+

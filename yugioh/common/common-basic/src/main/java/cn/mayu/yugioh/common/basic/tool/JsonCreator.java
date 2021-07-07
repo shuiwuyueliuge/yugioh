@@ -3,7 +3,7 @@ package cn.mayu.yugioh.common.basic.tool;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 
 public class JsonCreator {
 
@@ -45,7 +45,7 @@ public class JsonCreator {
          * 下划线转驼峰
          */
         public JsonConstructorBuilder namingSnakeCase() {
-            objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+            objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
             return this;
         }
 

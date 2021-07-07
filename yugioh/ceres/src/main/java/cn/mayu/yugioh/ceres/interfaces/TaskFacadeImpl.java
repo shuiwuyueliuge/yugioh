@@ -2,13 +2,9 @@ package cn.mayu.yugioh.ceres.interfaces;
 
 import cn.mayu.yugioh.ceres.application.TaskCommandService;
 import cn.mayu.yugioh.ceres.application.command.TaskCreateCommand;
-import cn.mayu.yugioh.common.basic.domain.RemoteDomainEvent;
-import cn.mayu.yugioh.common.facade.hermes.EventFacade;
-import cn.mayu.yugioh.common.facade.hermes.commond.EventReceiveCommand;
 import cn.mayu.yugioh.common.web.handler.RestWrapController;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -24,20 +20,9 @@ public class TaskFacadeImpl {
 
     private final TaskCommandService taskCommandService;
 
-    private final EventFacade eventFacade;
-
     @PostMapping("/task/createTask")
     public void createTask(@RequestBody TaskCreateCommand taskCreateCommand) {
-        //taskCommandService.createTask(taskCreateCommand);
-        System.out.println(TraceContext.traceId());
-        RemoteDomainEvent runDomainEvent = new RemoteDomainEvent(
-                System.currentTimeMillis(),
-                "task-progress-in-0",
-                "{\"taskId\":\"" + 123 + "\",\"taskInfo\":\"" + 123 + "\"}",
-                ""
-        );
-
-        eventFacade.receiveEvent(new EventReceiveCommand(runDomainEvent));
+        taskCommandService.createTask(taskCreateCommand);
     }
 }
 

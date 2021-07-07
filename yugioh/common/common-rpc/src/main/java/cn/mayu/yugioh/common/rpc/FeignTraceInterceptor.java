@@ -3,7 +3,6 @@ package cn.mayu.yugioh.common.rpc;
 import cn.mayu.yugioh.common.web.trace.TraceManager;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @description:
