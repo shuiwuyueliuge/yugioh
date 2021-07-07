@@ -1,0 +1,1 @@
+prometheus --config.file=/Users/a../Documents/docker/prometheus/prometheus.yml

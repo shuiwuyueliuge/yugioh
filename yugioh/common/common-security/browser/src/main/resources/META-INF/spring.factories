@@ -1,0 +1,8 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+cn.mayu.yugioh.common.security.browser.BrowserSecurityConfig,\
+cn.mayu.yugioh.common.security.browser.BrowserAutoConfiguration,\
+cn.mayu.yugioh.common.security.browser.LoginProperty,\
+cn.mayu.yugioh.common.security.browser.CsrfProperty,\
+cn.mayu.yugioh.common.security.browser.LogoutProperty,\
+cn.mayu.yugioh.common.security.browser.RememberMeProperty,\
+cn.mayu.yugioh.common.security.browser.SessionProperty

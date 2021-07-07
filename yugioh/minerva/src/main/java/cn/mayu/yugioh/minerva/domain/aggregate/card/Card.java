@@ -56,7 +56,6 @@ public class Card extends Entity {
                 monster.getAtk(),
                 typeSt,
                 monster.getLinkArrow(),
-                "card-create",
                 include
         ));
     }

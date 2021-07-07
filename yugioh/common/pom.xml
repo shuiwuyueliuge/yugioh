@@ -16,6 +16,11 @@
         <module>common-facade</module>
         <module>common-web</module>
         <module>common-redis</module>
+        <module>common-rpc</module>
+        <module>common-web-reactive</module>
+        <module>common-rpc-reactive</module>
+        <module>common-security</module>
+        <module>common-skywalking-plugin</module>
     </modules>
 
     <dependencies>

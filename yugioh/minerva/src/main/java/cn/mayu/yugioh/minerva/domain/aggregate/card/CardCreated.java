@@ -37,8 +37,6 @@ public class CardCreated implements DomainEvent {
 
     private final List<String> linkArrow;
 
-    private final String eventType;
-
     private final List<Include> include;
 
     @Override

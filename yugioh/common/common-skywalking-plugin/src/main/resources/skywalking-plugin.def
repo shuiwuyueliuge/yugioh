@@ -1,0 +1,2 @@
+resilience4j-circuitBreaker=cn.mayu.yugioh.skywalking.amp.plugin.resilience4j.define.CircuitBreakerInstrumentation
+apache-http-client=cn.mayu.yugioh.skywalking.amp.plugin.resilience4j.define.ApacheHttpClientInstrumentation

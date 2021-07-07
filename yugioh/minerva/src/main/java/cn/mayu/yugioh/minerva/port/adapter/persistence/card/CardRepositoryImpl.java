@@ -1,5 +1,6 @@
 package cn.mayu.yugioh.minerva.port.adapter.persistence.card;
 
+import cn.mayu.yugioh.common.basic.tool.BeanPropertiesCopier;
 import cn.mayu.yugioh.minerva.domain.aggregate.card.Card;
 import cn.mayu.yugioh.minerva.domain.aggregate.card.CardRepository;
 import cn.mayu.yugioh.minerva.domain.aggregate.card.Include;
@@ -16,10 +17,13 @@ public class CardRepositoryImpl implements CardRepository {
     @Autowired
     private JpaCardRepository jpaCardRepository;
 
+    @Autowired
+    private ElasticSearchCardRepository elasticSearchCardRepository;
+
     @Override
-    public synchronized void store(Card card) {
-        CardDO saved = jpaCardRepository.findByPassword(card.getCardIdentity().getPassword());
-        CardDO cardDO = new CardDO();
+    public void store(Card card) {
+        JpaCardDO saved = jpaCardRepository.findByPassword(card.getCardIdentity().getPassword());
+        JpaCardDO cardDO = new JpaCardDO();
         if (saved != null) {
             cardDO.setId(saved.getId());
         }
@@ -54,5 +58,9 @@ public class CardRepositoryImpl implements CardRepository {
         cardDO.setTypeVal(card.getTypeVal());
         cardDO.setInclude(includes.stream().map(Include::toString).collect(Collectors.joining(",")));
         jpaCardRepository.save(cardDO);
+
+        ElasticSearchCardDO elasticSearchCard = new ElasticSearchCardDO();
+        BeanPropertiesCopier.copyProperties(cardDO, elasticSearchCard);
+        elasticSearchCardRepository.save(elasticSearchCard);
     }
 }

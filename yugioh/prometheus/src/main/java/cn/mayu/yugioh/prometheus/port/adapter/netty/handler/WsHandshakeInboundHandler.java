@@ -21,12 +21,12 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 /**
  * @description: websocket握手处理
- *               websocket握手协议使用http(s)
- *               用户登陆成功后链接ws服务，客户端每隔10s发起内容为'\n'的ws心跳。
- *               ws服务器保存用户的绘话信息。
- *               10s内无心跳包删除用户绘话信息。
- *               每台ws服务绑定一个stomp服务，通过channel_id找到stomp的队列发送信息到指定的ws服务器，
- *               ws服务根据用户id找对对应的channel，发送数据。
+ * websocket握手协议使用http(s)
+ * 用户登陆成功后链接ws服务，客户端每隔10s发起内容为'\n'的ws心跳。
+ * ws服务器保存用户的绘话信息。
+ * 10s内无心跳包删除用户绘话信息。
+ * 每台ws服务绑定一个stomp服务，通过channel_id找到stomp的队列发送信息到指定的ws服务器，
+ * ws服务根据用户id找对对应的channel，发送数据。
  * @author: YgoPlayer
  * @time: 2021/5/25 4:08 下午
  */
@@ -35,26 +35,24 @@ public class WsHandshakeInboundHandler extends SimpleChannelInboundHandler<FullH
     private static final String wsUri = "/prometheus";
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest req) throws Exception {
-        // TODO gateway authentication
+    protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest req) {
         String uri = req.uri();
-        if (wsUri.equals(uri) && req.decoderResult().isSuccess() && ("websocket".equals(req.headers().get(UPGRADE)))) {
-            WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(wsUri, null, false);
-            WebSocketServerHandshaker handShaker = wsFactory.newHandshaker(req);
-            if (handShaker == null) {
-                WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
-            } else {
-                handShaker.handshake(ctx.channel(), req);
-                Attribute<WebSocketServerHandshaker> attribute = ctx.channel().attr(AttributeKey.valueOf("WebSocketServerHandshaker"));
-
-                attribute.set(handShaker);
-            }
-
-            ChannelSupervise.addChannel(ctx.channel());
+        if (!wsUri.equals(uri) || !req.decoderResult().isSuccess() || !("websocket".equals(req.headers().get(UPGRADE)))) {
+            sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, BAD_REQUEST));
             return;
         }
 
-        sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, BAD_REQUEST));
+        WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(wsUri, null, false);
+        WebSocketServerHandshaker handShaker = wsFactory.newHandshaker(req);
+        if (handShaker == null) {
+            WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
+            return;
+        }
+
+        handShaker.handshake(ctx.channel(), req);
+        Attribute<WebSocketServerHandshaker> attribute = ctx.channel().attr(AttributeKey.valueOf("WebSocketServerHandshaker"));
+        attribute.set(handShaker);
+        ChannelSupervise.addChannel(ctx.channel());
     }
 
     private void sendHttpResponse(ChannelHandlerContext ctx, FullHttpRequest req, DefaultFullHttpResponse res) {

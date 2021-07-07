@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+cn.mayu.yugioh.common.facade.hermes.EventFacadeFacadeFallback,\
+cn.mayu.yugioh.common.facade.hermes.EventFacadeFacadeFallbackFactory

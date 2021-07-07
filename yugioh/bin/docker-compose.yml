@@ -2,8 +2,8 @@ version: "3"
 services:
   redis:
     container_name: redis
-#    privileged: true
-#    restart: always
+    #    privileged: true
+    #    restart: always
     image: redis
     network_mode: firstnetwork
     ports:
@@ -16,7 +16,7 @@ services:
   rabbitmq:
     container_name: rabbitmq
     hostname: my-rabbit
-#    restart: always
+    #    restart: always
     network_mode: firstnetwork
     image: rabbitmq:3-management
     ports:
@@ -26,8 +26,8 @@ services:
       - 15674:15674
   mysql:
     container_name: mysql
-#    privileged: true
-#    restart: always
+    #    privileged: true
+    #    restart: always
     network_mode: firstnetwork
     image: mysql
     ports:
@@ -39,3 +39,53 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - TZ=Asia/Shanghai
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:7.1.1
+#    restart: always
+    network_mode: firstnetwork
+    ports:
+      - 9300:9300
+      - 9200:9200
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - /Users/a../Documents/docker/es/config:/config
+      - /Users/a../Documents/docker/es/plugins:/plugins
+      - /Users/a../Documents/docker/es/data:/data
+      - /Users/a../Documents/docker/es/logs:/logs
+  kibana:
+    container_name: kibana
+    image: kibana:7.1.1
+#    restart: always
+    network_mode: firstnetwork
+    ports:
+      - 5601:5601
+  skywalking:
+    container_name: skywalking
+    image: apache/skywalking-oap-server:8.4.0-es7
+    network_mode: firstnetwork
+    ports:
+      - 12800:12800
+      - 11800:11800
+    environment:
+      - TZ=Asia/Shanghai
+    links:
+      - elasticsearch:elasticsearch
+  skywalkingui:
+    container_name: skywalking-ui
+    image: apache/skywalking-ui:latest
+    network_mode: firstnetwork
+    links:
+      - skywalking:skywalking
+    ports:
+      - 9999:8080
+    environment:
+      - SW_OAP_ADDRESS=skywalking:12800
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+#    network_mode: firstnetwork
+    network_mode: "host"
+    volumes:
+      - /Users/a../Documents/docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml

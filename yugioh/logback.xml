@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <contextName>inspection</contextName>
+
+    <springProperty name="USER_HOME" source="logging.file.path"/>
+    <property name="PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level - [%X{traceId}] - [%X{uri}] -  %msg%n"/>
+    <timestamp key="byDay" datePattern="yyyy-MM-dd"/>
+
+    <appender name="INFO_ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${USER_HOME}/info/%d{yyyyMMdd}/info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>${PATTERN}</Pattern>
+        </layout>
+    </appender>
+
+    <appender name="ERROR_ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${USER_HOME}/error/%d{yyyyMMdd}/error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>${PATTERN}</Pattern>
+        </layout>
+    </appender>
+
+    <appender name="ASYNC_INFO_ROLLING" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="INFO_ROLLING"/>
+    </appender>
+
+    <appender name="ASYNC_ERROR_ROLLING" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="ERROR_ROLLING"/>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="ASYNC_INFO_ROLLING"/>
+        <appender-ref ref="ASYNC_ERROR_ROLLING"/>
+    </root>
+</configuration>
+

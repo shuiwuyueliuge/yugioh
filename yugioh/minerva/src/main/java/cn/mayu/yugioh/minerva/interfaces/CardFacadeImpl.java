@@ -3,7 +3,7 @@
 //import cn.mayu.yugioh.common.facade.minerva.model.CardQueryListRequest;
 //import cn.mayu.yugioh.common.facade.minerva.model.CardInfo;
 //import cn.mayu.yugioh.common.facade.minerva.CardFacade;
-//import cn.mayu.yugioh.common.web.result.Pageable;
+//import cn.mayu.yugioh.common.web.handler.Pageable;
 //import cn.mayu.yugioh.common.web.result.ResponseBodyWrapper;
 //import cn.mayu.yugioh.minerva.application.card.CardQueryService;
 //import org.springframework.beans.factory.annotation.Autowired;

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://logging.apache.org/log4j/2.0/config Log4j-config.xsd"
+               status="off" monitorInterval="300">
+
+    <Properties>
+        <Property name="LOG_HOME" value="logs/ceres"/>
+        <Property name="PATTERN" value="%d{HH:mm:ss.SSS} [%t] %-5level [%c:%L] - %msg%n"/>
+        <Property name="INFO_LOG_HOME" value="${LOG_HOME}/info.log"/>
+        <Property name="INFO_FILE_PATTERN" value="${LOG_HOME}/%d{yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log.gz"/>
+        <Property name="ERROR_LOG_HOME" value="${LOG_HOME}/error.log"/>
+        <Property name="ERROR_FILE_PATTERN" value="${LOG_HOME}/%d{yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log.gz"/>
+        <Property name="WARN_LOG_HOME" value="${LOG_HOME}/warn.log"/>
+        <Property name="WARN_FILE_PATTERN" value="${LOG_HOME}/%d{yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log.gz"/>
+        <Property name="EVERY_FILE_SIZE" value="100MB"/>
+        <Property name="MAX_FILE_NUMBER" value="100"/>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${PATTERN}"/>
+        </Console>
+        <RollingFile name="InfoLog" fileName="${INFO_LOG_HOME}" filePattern="${INFO_FILE_PATTERN}">
+            <PatternLayout pattern="${PATTERN}"/>
+            <Filters>
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="${EVERY_FILE_SIZE}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${MAX_FILE_NUMBER}"/>
+        </RollingFile>
+        <RollingFile name="ErrorLog" fileName="${ERROR_LOG_HOME}" filePattern="${ERROR_FILE_PATTERN}">
+            <PatternLayout pattern="${PATTERN}"/>
+            <Filters>
+                <ThresholdFilter level="FATAL" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="ERROR" onMatch="ACCEPT"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="${EVERY_FILE_SIZE}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${MAX_FILE_NUMBER}"/>
+        </RollingFile>
+        <RollingFile name="WarnLog" fileName="${WARN_LOG_HOME}" filePattern="${WARN_FILE_PATTERN}">
+            <PatternLayout pattern="${PATTERN}"/>
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="WARN" onMatch="ACCEPT"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="${EVERY_FILE_SIZE}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${MAX_FILE_NUMBER}"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <AsyncLogger name="cn.mayu.yugioh.ceres" level="info" additivity="false" includeLocation="false">
+            <AppenderRef ref="Console"/>
+        </AsyncLogger>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="ErrorLog"/>
+            <AppenderRef ref="InfoLog"/>
+            <AppenderRef ref="WarnLog"/>
+        </Root>
+    </Loggers>
+</Configuration>

@@ -1,8 +1,6 @@
 package cn.mayu.yugioh.common.redis.lock;
 
 import cn.mayu.yugioh.common.basic.tool.BeanManager;
-import cn.mayu.yugioh.common.redis.LockObservable;
-import cn.mayu.yugioh.common.redis.LockObserver;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -84,7 +82,7 @@ public class RedisDistributedLock implements Lock {
             try {
                 countDownLatch.await(Long.parseLong(timeoutMillis), TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error("wait try lock", e);
             }
 
             ttl = tryAcquire();

@@ -19,3 +19,9 @@ public class Hermes {
         app.run(args);
     }
 }
+
+/**
+ * -javaagent:/Users/a../Downloads/apache-skywalking-apm-bin/agent/skywalking-agent.jar
+ * -Dskywalking_config=/Users/a../Downloads/apache-skywalking-apm-bin/agent/config/agent.config
+ * -Dskywalking.agent.service_name=hermes
+ */

@@ -1,5 +1,8 @@
 package cn.mayu.yugioh.prometheus.port.adapter.stomp;
 
+import cn.mayu.yugioh.common.basic.domain.RemoteDomainEvent;
+import cn.mayu.yugioh.common.basic.tool.JsonParser;
+import cn.mayu.yugioh.prometheus.port.adapter.netty.ChannelSupervise;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.messaging.Message;
@@ -40,6 +43,15 @@ public class DefaultChannelInterceptor implements ChannelInterceptor {
 
         if (Objects.equals(command, StompCommand.CONNECTED)) {
             appContext.publishEvent(new BrokerConnectedEvent(this));
+        }
+
+        if (Objects.equals(command, StompCommand.MESSAGE)) {
+            RemoteDomainEvent domainEvent = JsonParser.defaultInstance().readObjectValue(message.getPayload().toString(), RemoteDomainEvent.class);
+            String routingKey = domainEvent.getRoutingKey();
+            if (!Objects.isNull(routingKey) && routingKey.contains("|")) {
+                String channelId = routingKey.split("\\|")[1];
+                ChannelSupervise.send2One(channelId, domainEvent.getPayload());
+            }
         }
 
         if (log.isDebugEnabled()) {

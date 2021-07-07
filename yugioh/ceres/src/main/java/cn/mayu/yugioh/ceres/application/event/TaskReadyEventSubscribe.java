@@ -61,6 +61,10 @@ public class TaskReadyEventSubscribe implements DomainEventSubscribe<TaskReady>,
     @Override
     public void run() {
         while(true) {
+            if (Objects.isNull(currTask)) {
+                LockSupport.park();
+            }
+
             currTask.running();
             List<Task> nextList = taskRepository.findByIpPortAndStatus(ipPort, TaskStatusEnum.READY, 0, 1);
             while(!nextList.isEmpty()) {
@@ -69,7 +73,7 @@ public class TaskReadyEventSubscribe implements DomainEventSubscribe<TaskReady>,
                 nextList = taskRepository.findByIpPortAndStatus(ipPort, TaskStatusEnum.READY, 0, 1);
             }
 
-            LockSupport.park();
+            currTask = null; // 处理虚假唤醒
         }
     }
 

@@ -1,7 +1,7 @@
 //package cn.mayu.yugioh.minerva.application.card;
 //
 //import cn.mayu.yugioh.common.facade.minerva.model.CardInfo;
-//import cn.mayu.yugioh.common.web.result.Pageable;
+//import cn.mayu.yugioh.common.web.handler.Pageable;
 //import cn.mayu.yugioh.minerva.application.RestCode;
 //import cn.mayu.yugioh.minerva.application.exception.DataCenterNotFoundException;
 //import cn.mayu.yugioh.minerva.domain.aggregate.card.Card;

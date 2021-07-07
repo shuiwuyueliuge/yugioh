@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+cn.mayu.yugioh.common.rpc.FeignConfiguration,\
+cn.mayu.yugioh.common.rpc.FeignProperties

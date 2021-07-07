@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -97,6 +100,26 @@ public class JsonParser {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public <T> T readObjectValue(byte[] content, Class<T> valueType)  {
+        try {
+            return objectMapper.readValue(content, valueType);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public <T> T readObjectValue(InputStream inputStream, Class<T> valueType)  {
+        try {
+            return objectMapper.readValue(inputStream, valueType);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public <T> T convertValue(Object fromValue, JavaType toValueType)  {
+        return objectMapper.convertValue(fromValue, toValueType);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package cn.mayu.yugioh.common.redis;
 
+import cn.mayu.yugioh.common.redis.lock.LockObservable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.listener.PatternTopic;
@@ -25,5 +26,10 @@ public class RedisAutoConfiguration {
     @Bean
     public LockObservable lockObservable(){
         return new LockObservable();
+    }
+
+    @Bean
+    public RedisOperator redisOperator(RedisConnectionFactory redisConnectionFactory) {
+        return new RedisOperator(redisConnectionFactory);
     }
 }

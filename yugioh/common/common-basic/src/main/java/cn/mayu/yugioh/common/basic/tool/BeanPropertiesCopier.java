@@ -36,7 +36,7 @@ public class BeanPropertiesCopier {
         copier.copy(source, target, null);
     }
 
-    public static <T> T copyProperties(T source, Class<T> targetClass) {
+    public static <T> T newByProperties(Object source, Class<T> targetClass) {
         if (source == null) {
             return null;
         }
