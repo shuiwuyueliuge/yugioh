@@ -16,5 +16,5 @@ public class TaskCreateCommand {
 
     private String dataCenter; // 数据来源的抽象
 
-    private String operateChannel; // websocket的通道id parentTask为空必传
+    private String operateChannel; // websocket的通道id
 }

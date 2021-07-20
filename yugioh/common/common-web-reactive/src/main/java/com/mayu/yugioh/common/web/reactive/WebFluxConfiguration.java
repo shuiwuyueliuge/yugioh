@@ -1,9 +1,6 @@
 package com.mayu.yugioh.common.web.reactive;
 
-import com.mayu.yugioh.common.web.reactive.handler.DefaultRestCodeGenerator;
-import com.mayu.yugioh.common.web.reactive.handler.RestCodeGenerator;
-import com.mayu.yugioh.common.web.reactive.handler.WebFluxExceptionAdvice;
-import com.mayu.yugioh.common.web.reactive.handler.WebFluxResultHandler;
+import com.mayu.yugioh.common.web.reactive.handler.*;
 import com.mayu.yugioh.common.web.reactive.trace.WebFluxTraceFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -24,6 +21,11 @@ public class WebFluxConfiguration {
     @Bean
     public WebFluxTraceFilter webFluxTraceFilter() {
         return new WebFluxTraceFilter();
+    }
+
+    @Bean
+    public FilterBodyHandler filterBodyHandler() {
+        return new FilterBodyHandler();
     }
 
     @Bean

@@ -1,5 +1,6 @@
 package cn.mayu.yugioh.common.web.handler;
 
+import cn.mayu.yugioh.common.basic.tool.JsonCreator;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,5 +22,10 @@ public class RestResult {
         this.code = code;
         this.data = data;
         this.msg = msg;
+    }
+
+    @Override
+    public String toString() {
+        return JsonCreator.defaultInstance().writeValueAsString(this);
     }
 }

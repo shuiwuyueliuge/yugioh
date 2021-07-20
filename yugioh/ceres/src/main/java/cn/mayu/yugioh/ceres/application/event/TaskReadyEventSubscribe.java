@@ -22,7 +22,7 @@ public class TaskReadyEventSubscribe implements DomainEventSubscribe<TaskReady>,
 
     private final TaskRepository taskRepository;
 
-    private final Thread execute;
+    private Thread execute;
 
     private volatile Task currTask;
 
@@ -30,7 +30,6 @@ public class TaskReadyEventSubscribe implements DomainEventSubscribe<TaskReady>,
 
     public TaskReadyEventSubscribe(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
-        this.execute = new Thread(this);
     }
 
     @Override
@@ -40,8 +39,12 @@ public class TaskReadyEventSubscribe implements DomainEventSubscribe<TaskReady>,
         }
 
         synchronized (TaskReadyEventSubscribe.class) {
-            if (Objects.equals(execute.getState(), Thread.State.RUNNABLE)) {
-                return;
+            if (Objects.isNull(execute)) {
+                this.execute = new Thread(this);
+            } else {
+                if (Objects.equals(execute.getState(), Thread.State.RUNNABLE)) {
+                    return;
+                }
             }
         }
 

@@ -34,16 +34,6 @@ public class WebFluxExceptionAdvice {
         });
     }
 
-//    @ExceptionHandler(FeignException.class)
-//    public Mono<RestResult> exception(FeignException feignException) {
-//        return WebFluxRequestContextHolder.getRequest().map(request -> {
-//            String msgTemplate = "Request Method: [%s] Request URI: [%s] Has a Feign Error";
-//            String errorMsg = String.format(msgTemplate, request.getMethodValue(), request.getPath());
-//            log.error(errorMsg, feignException);
-//            return new RestResult(feignException.status(), feignException.getMessage());
-//        });
-//    }
-
     /**
      * 系统异常
      *

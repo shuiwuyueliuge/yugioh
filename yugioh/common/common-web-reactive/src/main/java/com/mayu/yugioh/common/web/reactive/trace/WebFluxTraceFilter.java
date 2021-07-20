@@ -2,6 +2,7 @@ package com.mayu.yugioh.common.web.reactive.trace;
 
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
+import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
@@ -14,18 +15,17 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * @description:
+ * @description: 拦截请求信息和响应信息
  * @author: YgoPlayer
  * @time: 2021/6/1 11:48 上午
  */
 @Slf4j
-public class WebFluxTraceFilter implements WebFilter {
+public class WebFluxTraceFilter implements WebFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
@@ -101,5 +101,15 @@ public class WebFluxTraceFilter implements WebFilter {
                 request.getQueryParams(),
                 bodyString
         );
+    }
+
+    /**
+     * 从低到高的顺序，即最低值具有高优先级
+     *
+     * @return 优先级
+     */
+    @Override
+    public int getOrder() {
+        return Ordered.HIGHEST_PRECEDENCE;
     }
 }

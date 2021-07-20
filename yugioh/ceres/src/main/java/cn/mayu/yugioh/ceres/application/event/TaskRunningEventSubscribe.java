@@ -11,11 +11,10 @@ import cn.mayu.yugioh.common.basic.tool.JsonCreator;
 import cn.mayu.yugioh.common.facade.hermes.EventFacade;
 import cn.mayu.yugioh.common.facade.hermes.commond.EventReceiveCommand;
 import cn.mayu.yugioh.common.facade.minerva.model.CardCreateCommand;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
 import java.util.Date;
 
 /**
@@ -25,6 +24,7 @@ import java.util.Date;
  */
 @Slf4j
 @Component
+@AllArgsConstructor
 public class TaskRunningEventSubscribe implements DomainEventSubscribe<TaskRunning> {
 
     private final EventFacade eventFacade;
@@ -32,16 +32,6 @@ public class TaskRunningEventSubscribe implements DomainEventSubscribe<TaskRunni
     private final TaskRepository taskRepository;
 
     private final DataCenterService taskService;
-
-    public TaskRunningEventSubscribe(
-            TaskRepository taskRepository,
-            DataCenterService taskService,
-            EventFacade eventFacade
-    ) {
-        this.taskRepository = taskRepository;
-        this.taskService = taskService;
-        this.eventFacade = eventFacade;
-    }
 
     @Override
     public void subscribe(TaskRunning taskRunning) {
@@ -85,7 +75,7 @@ public class TaskRunningEventSubscribe implements DomainEventSubscribe<TaskRunni
     private void sendTaskProgress(Task task, String taskProgressInfo) {
         RemoteDomainEvent runDomainEvent = new RemoteDomainEvent(
                 System.currentTimeMillis(),
-                "task-progress-in-0",
+                "async-message-in-0",
                 "{\"taskId\":\"" + task.getTaskIdentity().getUuid() + "\",\"taskInfo\":\"" + taskProgressInfo + "\"}",
                 task.getOperateChannel()
         );

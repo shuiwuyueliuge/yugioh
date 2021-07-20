@@ -21,6 +21,7 @@
         <module>common-rpc-reactive</module>
         <module>common-security</module>
         <module>common-skywalking-plugin</module>
+        <module>common-agent</module>
     </modules>
 
     <dependencies>

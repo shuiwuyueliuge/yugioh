@@ -1,5 +1,7 @@
 package cn.mayu.yugioh.common.security.application;
 
+import cn.mayu.yugioh.common.web.handler.RestCodeGenerator;
+import cn.mayu.yugioh.common.web.handler.RestResult;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -25,6 +27,8 @@ public class TokenAuthenticationSuccessHandler implements AuthenticationSuccessH
 
     private final AuthorizationServerTokenServices tokenServices;
 
+    private final RestCodeGenerator restCodeGenerator;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String clientId = request.getParameter("client_id");
@@ -34,7 +38,7 @@ public class TokenAuthenticationSuccessHandler implements AuthenticationSuccessH
         }
 
         OAuth2AccessToken accessToken = createToken(clientId, grantType, authentication);
-        response.getWriter().write(accessToken.getValue());
+        response.getWriter().write(new RestResult(restCodeGenerator.restSuccessCode(), accessToken.getValue(), restCodeGenerator.restSuccessMsg()).toString());
     }
 
     private OAuth2AccessToken createToken(String clientId, String grantType, Authentication authentication) {

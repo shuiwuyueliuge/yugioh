@@ -25,6 +25,14 @@ public class JsonCreator {
         }
     }
 
+    public byte[] writeValueAsBytes(Object value) {
+        try {
+            return objectMapper.writeValueAsBytes(value);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(value + " to json error " + e.getMessage());
+        }
+    }
+
     public static class JsonConstructorBuilder {
 
         private final ObjectMapper objectMapper;

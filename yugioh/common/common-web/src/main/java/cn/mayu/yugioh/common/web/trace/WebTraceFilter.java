@@ -12,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @description: 记录请求和响应数据
@@ -54,13 +53,13 @@ public class WebTraceFilter extends OncePerRequestFilter {
 
     private void requestLog(HttpServletRequest request, byte[] bytes, String traceId) {
         String bodyString = new String(bytes, StandardCharsets.UTF_8);
-        String headerString = Stream.of(request.getHeaderNames())
-                .filter(Enumeration::hasMoreElements)
-                .map(header -> {
-                    String headerKey = header.nextElement();
-                    return headerKey + ": " + request.getHeader(headerKey);
-                })
-                .collect(Collectors.joining(","));
+        StringBuilder headerString = new StringBuilder();
+        Enumeration<String> headerEnumeration = request.getHeaderNames();
+        while(headerEnumeration.hasMoreElements()) {
+            String headerKey = headerEnumeration.nextElement();
+            headerString.append(headerKey).append(": ").append(request.getHeader(headerKey)).append(",");
+        }
+
         StringBuilder paramString = new StringBuilder();
         Enumeration<String> paramEnumeration = request.getParameterNames();
         while(paramEnumeration.hasMoreElements()) {
@@ -73,7 +72,7 @@ public class WebTraceFilter extends OncePerRequestFilter {
                 traceId,
                 request.getMethod(),
                 request.getRequestURL(),
-                headerString,
+                Objects.equals(headerString.toString(), "") ? "[]" : headerString.substring(0, headerString.length() - 1),
                 Objects.equals(paramString.toString(), "") ? "[]" : paramString.substring(0, paramString.length() - 1),
                 Objects.equals(bodyString, "") ? "[]" : bodyString
         );

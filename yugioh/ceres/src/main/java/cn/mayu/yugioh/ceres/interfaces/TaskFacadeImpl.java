@@ -36,9 +36,6 @@ public class TaskFacadeImpl {
 
 
 
-
-
-
 // 查询卡片列表（卡包条件）
 // 查询卡片详情
 

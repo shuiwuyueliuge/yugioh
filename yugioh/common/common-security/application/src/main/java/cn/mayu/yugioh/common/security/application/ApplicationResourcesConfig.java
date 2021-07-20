@@ -1,5 +1,6 @@
 package cn.mayu.yugioh.common.security.application;
 
+import cn.mayu.yugioh.common.web.handler.RestCodeGenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -26,12 +27,14 @@ public class ApplicationResourcesConfig extends ResourceServerConfigurerAdapter 
 
     private final AuthorizeRequestManager authorizeRequestManager;
 
+    private final RestCodeGenerator restCodeGenerator;
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         authorizeRequestManager.config(http.authorizeRequests());
         http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                 .and()
-                .formLogin().successHandler(new TokenAuthenticationSuccessHandler(clientDetailsService, tokenServices));
+                .formLogin().successHandler(new TokenAuthenticationSuccessHandler(clientDetailsService, tokenServices, restCodeGenerator));
     }
 
     @Override
